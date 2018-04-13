@@ -1,0 +1,72 @@
+* {margin: 0; padding: 0; border: 0;}
+
+#chessboard {
+    float: left;
+    padding: 10px;
+    background-color: #f00033;
+    border: 5px solid #333;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.tile {
+    float: left;
+    height: 64px;
+    width: 64px;
+}
+
+.dark {
+    background-color: #999;
+}
+
+.light {
+    background-color: #fff;
+}
+
+#player {
+    background-color: #f00033;
+    border-radius: 50%;
+}
+
+.piece {
+    cursor: pointer;
+    text-align: center;
+    position: absolute;
+    height: 46px;
+    width: 46px;
+    top: 19px;
+    left: 19px;
+}
+
+span.icon {
+    display: block;
+    font-size: 30px;
+}
+
+.hover {
+	-webkit-box-shadow: inset 0px 0px 5px 5px rgba(240, 0, 51, .5);
+	box-shadow: inset 0px 0px 5px 5px rgba(240, 0, 51, .5);
+}
+
+.smoothmove {
+	-webkit-transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
+	-moz-transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
+	-ms-transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
+	-o-transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
+	transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
+}
+
+.smoothfade {
+	-webkit-transition: box-shadow 0.25s ease-out;
+	-moz-transition: box-shadow 0.25s ease-out;
+	-ms-transition: box-shadow 0.25s ease-out;
+	-o-transition: box-shadow 0.25s ease-out;
+	transition: box-shadow 0.25s ease-out;
+
+	-webkit-transition: background-color 0.25s ease-in time;
+	-moz-transition: background-color 0.25s ease-in time;
+	-ms-transition: background-color 0.25s ease-in time;
+	-o-transition: background-color 0.25s ease-in time;
+	transition: background-color 0.25s ease-in time;
+}

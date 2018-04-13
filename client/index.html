@@ -1,0 +1,99 @@
+<!doctype html>
+
+<html>
+    <head>
+        <link rel="stylesheet" href="css/app.css" type="text/css" charset="utf-8">
+    </head>
+
+    <body>
+        <div>
+            <div class="log"></div>
+            <textarea></textarea>
+        </div>
+
+        <div id="chessboard">
+            <div id="" class="piece black-rook-1 smoothmove"><span class="icon">&#9820;</span></div>
+            <div id="" class="piece black-knight-1 smoothmove"><span class="icon">&#9822;</span></div>
+            <div id="" class="piece black-bishop-1 smoothmove"><span class="icon">&#9821;</span></div>
+            <div id="" class="piece black-queen smoothmove"><span class="icon">&#9819;</span></div>
+            <div id="" class="piece black-king smoothmove"><span class="icon">&#9818;</span></div>
+            <div id="" class="piece black-bishop-2 smoothmove"><span class="icon">&#9821;</span></div>
+            <div id="" class="piece black-knight-2 smoothmove"><span class="icon">&#9822;</span></div>
+            <div id="" class="piece black-rook-2 smoothmove"><span class="icon">&#9820;</span></div>
+
+            <div id="" class="piece black-pawn-1 smoothmove"><span class="icon">&#9823;</span></div>
+            <div id="" class="piece black-pawn-2 smoothmove"><span class="icon">&#9823;</span></div>
+            <div id="" class="piece black-pawn-3 smoothmove"><span class="icon">&#9823;</span></div>
+            <div id="" class="piece black-pawn-4 smoothmove"><span class="icon">&#9823;</span></div>
+            <div id="" class="piece black-pawn-5 smoothmove"><span class="icon">&#9823;</span></div>
+            <div id="" class="piece black-pawn-6 smoothmove"><span class="icon">&#9823;</span></div>
+            <div id="" class="piece black-pawn-7 smoothmove"><span class="icon">&#9823;</span></div>
+            <div id="" class="piece black-pawn-8 smoothmove"><span class="icon">&#9823;</span></div>
+
+            <div id="" class="piece white-rook-1 smoothmove"><span class="icon">&#9814;</span></div>
+            <div id="" class="piece white-knight-1 smoothmove"><span class="icon">&#9816;</span></div>
+            <div id="" class="piece white-bishop-1 smoothmove"><span class="icon">&#9815;</span></div>
+            <div id="" class="piece white-queen smoothmove"><span class="icon">&#9813;</span></div>
+            <div id="" class="piece white-king smoothmove"><span class="icon">&#9812;</span></div>
+            <div id="" class="piece white-bishop-2 smoothmove"><span class="icon">&#9815;</span></div>
+            <div id="" class="piece white-knight-2 smoothmove"><span class="icon">&#9816;</span></div>
+            <div id="" class="piece white-rook-2 smoothmove"><span class="icon">&#9814;</span></div>
+
+            <div id="" class="piece white-pawn-1 smoothmove"><span class="icon">&#9817;</span></div>
+            <div id="" class="piece white-pawn-2 smoothmove"><span class="icon">&#9817;</span></div>
+            <div id="" class="piece white-pawn-3 smoothmove"><span class="icon">&#9817;</span></div>
+            <div id="" class="piece white-pawn-4 smoothmove"><span class="icon">&#9817;</span></div>
+            <div id="" class="piece white-pawn-5 smoothmove"><span class="icon">&#9817;</span></div>
+            <div id="" class="piece white-pawn-6 smoothmove"><span class="icon">&#9817;</span></div>
+            <div id="" class="piece white-pawn-7 smoothmove"><span class="icon">&#9817;</span></div>
+            <div id="" class="piece white-pawn-8 smoothmove"><span class="icon">&#9817;</span></div>
+        </div>
+    </body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/chess.js"></script>
+
+    <script src='socket.io/socket.io.js'></script>
+    <script>
+        (function() {
+            var getNode = function(s) {
+                return document.querySelector(s);
+            },
+                log = getNode('.log'),
+                textarea = getNode('textarea');
+
+            try {
+                var socket = io.connect('http://192.168.56.101:8080');
+            } catch(e) {
+                console.log('Error, no connection.');
+            }
+
+            if(socket !== undefined) {
+                // Listen for a received communication.
+                socket.on('output', function(data) {
+                    if(data.length) {
+                        for(var i = 0; i < data.length; i++) {
+                            var content = document.createElement('div');
+
+                            content.textContent = data[i].name;
+
+                            log.appendChild(content);
+                        }
+                    }
+                });
+
+                textarea.addEventListener('keydown', function(event) {
+                    var self = this;
+
+                    if(event.which === 13 && event.shiftKey === false) {
+                        socket.emit('input', {
+                            message: self.value
+                        });
+
+                        event.preventDefault();
+                    }
+                });
+            }
+        })();
+    </script>
+</html>
