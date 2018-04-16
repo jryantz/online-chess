@@ -1,7 +1,5 @@
 package node;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,7 +16,6 @@ public class Server {
             ServerSocket serverSocket = new ServerSocket(serverPort);
 
             System.out.println("Chess Server Started...");
-            System.out.println(serverSocket.getLocalSocketAddress());
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
@@ -36,12 +33,18 @@ public class Server {
 class Connection extends Thread {
 
     String fromClient;
-    String toClient;
 
     DataInputStream input;
     DataOutputStream output;
     Socket clientSocket;
 
+    /**
+     * Constructor for building the connection.
+     * Prepares the client socken and the input/output stream.
+     * Starts the thread.
+     *
+     * @param incomingClientSocket
+     */
     public Connection (Socket incomingClientSocket) {
 
         try {
@@ -57,6 +60,9 @@ class Connection extends Thread {
 
     } // end Connection.
 
+    /**
+     * Begin execution of the receiver thread.
+     */
     public void run() {
 
         boolean cont = true;
@@ -65,10 +71,8 @@ class Connection extends Thread {
 
             try {
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 
                 fromClient = in.readLine();
-                System.out.println("Received: " + fromClient);
 
                 if (fromClient.toLowerCase().equals("exit")) {
                     try {
