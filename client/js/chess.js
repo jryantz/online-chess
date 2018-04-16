@@ -72,6 +72,8 @@ $(document).ready(function() {
     tiles = $('.tile');
 
     $('.piece').on('click', function() {
+        $('.piece').attr('id', '');
+
         if ($(this).attr('id') == 'player') {
             $(this).attr('id', '');
         } else {
