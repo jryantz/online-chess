@@ -3,6 +3,10 @@ package node;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import chess.*;
 
 public class Server {
 
@@ -37,6 +41,8 @@ class Connection extends Thread {
     DataInputStream input;
     DataOutputStream output;
     Socket clientSocket;
+
+    HashMap<String, ArrayList> games = new HashMap<>();
 
     /**
      * Constructor for building the connection.
