@@ -1,8 +1,47 @@
 * {margin: 0; padding: 0; border: 0;}
 
+.coords ul {
+    float: left;
+    position: absolute;
+    color: white;
+}
+
+.coords ul.horz {
+    width: 512px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.coords ul.vert {
+    height: 512px;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.coords ul li {
+    list-style: none;
+}
+
+.coords ul.horz li {
+    float: left;
+    height: 20px;
+    width: 64px;
+    line-height: 20px;
+    text-align: center;
+}
+
+.coords ul.vert li {
+    height: 64px;
+    width: 20px;
+    line-height: 64px;
+    text-align: center;
+}
+
 #chessboard {
     float: left;
-    padding: 10px;
+    padding: 20px;
     background-color: #f00033;
     border: 5px solid #333;
     position: relative;

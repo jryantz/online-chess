@@ -78,11 +78,22 @@ $(document).ready(function() {
             $(this).attr('id', '');
         } else {
             $(this).attr('id', 'player');
+
+            // 29 is the chess board padding (20) + 9
+            var topValue = $(this).css('top').replace(/[^-\d\.]/g, '');
+            var leftValue = $(this).css('left').replace(/[^-\d\.]/g, '');
+
+            var topIndex = (topValue - 29) / 64;
+            var leftIndex = (leftValue - 29) / 64;
+
+            console.log('From: ' + xaxis[leftIndex] + yaxis[yaxis.length - 1 - topIndex]);
         }
     });
 
     $('.tile').on('click', function() {
         current = $(this);
+
+        console.log('To: ' + current.attr('data-gridpos'));
 
         var midX = $(this).position().left += ($(this).width() / 2)
         var midY = $(this).position().top += ($(this).width() / 2);
