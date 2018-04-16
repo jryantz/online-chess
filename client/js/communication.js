@@ -1,3 +1,4 @@
+// Communicates directly with the nodejs server.
 (function() {
     var getNode = function(s) {
         return document.querySelector(s);
@@ -14,15 +15,7 @@
     if(socket !== undefined) {
         // Listen for a received communication.
         socket.on('output', function(data) {
-            if(data.length) {
-                for(var i = 0; i < data.length; i++) {
-                    var content = document.createElement('div');
-
-                    content.textContent = data[i].name;
-
-                    log.appendChild(content);
-                }
-            }
+            console.log(data.message);
         });
 
         textarea.addEventListener('keydown', function(event) {
