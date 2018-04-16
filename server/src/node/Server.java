@@ -94,7 +94,22 @@ class Connection extends Thread {
                         cont = false;
                     }
 
-                    cont = false;
+                    if (fromClient.startsWith("--")) {
+                        String[] command = fromClient.toLowerCase().substring(2).split(" ");
+
+                        output.writeBytes("[Command] " + command[0]);
+                        if (command[0].equalsIgnoreCase("new")) {
+
+                        } else if (command[0].equalsIgnoreCase("list")) {
+
+                        } else if (command[0].equalsIgnoreCase("join")) {
+
+                        } else if (command[0].equalsIgnoreCase("leave")) {
+
+                        } else if (command[0].equalsIgnoreCase("move")) {
+
+                        }
+                    }
                 }
             } catch (IOException e) {
                 //System.out.println("IO: " + e.getMessage());
