@@ -39,6 +39,16 @@
     left: 19px;
 }
 
+.piece:before {
+    content: '';
+    position: absolute;
+    left: -9px;
+    top: -9px;
+    height: 64px;
+    width: 64px;
+    background-color: transparent;
+}
+
 span.icon {
     display: block;
     font-size: 30px;
