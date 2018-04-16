@@ -80,11 +80,18 @@ class Connection extends Thread {
 
                 fromClient = in.readLine();
 
-                if (fromClient.toLowerCase().equals("exit")) {
-                    try {
-                        clientSocket.close();
-                    } catch (IOException e) {
-                        // Closing failed.
+                if (fromClient != null) {
+                    System.out.println("Received: " + fromClient);
+                    output.writeBytes("[Resend] " + fromClient);
+
+                    if (fromClient.equalsIgnoreCase("exit")) {
+                        try {
+                            clientSocket.close();
+                        } catch (IOException e) {
+                            // Closing failed.
+                        }
+
+                        cont = false;
                     }
 
                     cont = false;
