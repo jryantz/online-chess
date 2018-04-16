@@ -48,10 +48,18 @@ client.on('error', function(error) {
     process.exit();
 });
 
-// If the Java Chess Server sends data back, handle that.
+// If the Java Chess Server sends data back, convert bytes to string and pass it back to the browser.
 client.on('data', function(data) {
     console.log('Received: ' + data);
-    client.destroy();
+
+    var content = '';
+    for(var i = 0; i < data.length; i++) {
+        content += (String.fromCharCode(data[i]));
+    }
+
+    io.sockets.emit('output', {
+        message: content
+    });
 });
 
 // Closes the connection to the Java Chess Server.
