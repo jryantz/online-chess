@@ -34,6 +34,10 @@ client.connect(4000, '10.0.2.2', function() {
     });
 });
 
+client.on('error', function(error) {
+    console.log('Error, could not connect to chess server.');
+    process.exit();
+});
 client.on('data', function(data) {
     console.log('Received: ' + data);
     client.destroy();
@@ -41,12 +45,5 @@ client.on('data', function(data) {
 
 client.on('close', function() {
    console.log('Connection closed.');
+   process.exit();
 });
-
-// io.sockets.on('connection', function(socket) {
-//     socket.on('input', function(data) {
-//         var message = data.message;
-//
-//         io.sockets.emit('output', [data]);
-//     });
-// })
