@@ -2,7 +2,7 @@ package chess;
 
 public class Move {
 
-    public static boolean valid(String piece, char from, char to) {
+    public static boolean valid(String piece, String from, String to) {
 
         switch(piece) {
             case "King":
@@ -15,11 +15,11 @@ public class Move {
 
     } // end valid.
 
-    private static boolean kingMove(char from, char to) {
+    private static boolean kingMove(String from, String to) {
         return false;
     } // end kingMove.
 
-    private static boolean queenMove(char from, char to) {
+    private static boolean queenMove(String from, String to) {
         return false;
     } // end queenMove.
 
