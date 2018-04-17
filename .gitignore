@@ -1,2 +1,4 @@
 server/Chess Server.iml
 server/.idea/*
+js-client/node_modules/*
+js-client/package-lock.json
