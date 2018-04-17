@@ -71,18 +71,19 @@ class Connection extends Thread {
      */
     public void run() {
 
+        BufferedReader in;
         boolean cont = true;
 
         while (cont) {
 
             try {
-                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
                 fromClient = in.readLine();
 
                 if (fromClient != null) {
                     System.out.println("Received: " + fromClient);
-                    output.writeBytes("[Resend] " + fromClient);
+                    output.writeBytes("" + fromClient + "\n");
 
                     if (fromClient.equalsIgnoreCase("exit")) {
                         try {
@@ -97,7 +98,7 @@ class Connection extends Thread {
                     if (fromClient.startsWith("--")) {
                         String[] command = fromClient.toLowerCase().substring(2).split(" ");
 
-                        output.writeBytes("[Command] " + command[0]);
+                        output.writeBytes("[Command] " + command[0] + "\n");
                         if (command[0].equalsIgnoreCase("new")) {
 
                         } else if (command[0].equalsIgnoreCase("list")) {
