@@ -38,7 +38,6 @@ class Connection extends Thread {
 
     String fromClient;
 
-    DataInputStream input;
     DataOutputStream output;
     Socket clientSocket;
 
@@ -56,7 +55,6 @@ class Connection extends Thread {
         try {
             clientSocket = incomingClientSocket;
 
-            input = new DataInputStream(clientSocket.getInputStream());
             output = new DataOutputStream(clientSocket.getOutputStream());
 
             this.start();
@@ -98,7 +96,9 @@ class Connection extends Thread {
                     if (fromClient.startsWith("--")) {
                         String[] command = fromClient.toLowerCase().substring(2).split(" ");
 
+                        System.out.println("Command");
                         output.writeBytes("[Command] " + command[0] + "\n");
+
                         if (command[0].equalsIgnoreCase("new")) {
 
                         } else if (command[0].equalsIgnoreCase("list")) {
@@ -108,12 +108,13 @@ class Connection extends Thread {
                         } else if (command[0].equalsIgnoreCase("leave")) {
 
                         } else if (command[0].equalsIgnoreCase("move")) {
-
+                            // Format: --move uid piece from-location to-location
+                            Move.valid(command[2], command[3], command[4]);
                         }
                     }
                 }
             } catch (IOException e) {
-                //System.out.println("IO: " + e.getMessage());
+                System.out.println("Error.");
                 e.printStackTrace();
             }
 
