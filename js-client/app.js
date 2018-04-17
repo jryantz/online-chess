@@ -22,7 +22,7 @@ var net = require('net'),
     client = new net.Socket();
 
 // Connect to the Java Chess Server.
-client.connect(4000, '10.0.2.2', function() {
+client.connect(4000, '127.0.0.1', function() {
     // Set no delay on to allow instant packet transfer.
     client.setNoDelay(true);
     console.log('Connected to chess server.');

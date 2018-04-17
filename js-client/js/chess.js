@@ -66,6 +66,26 @@ var placepieces = function() {
     }
 }
 
+// (function() {
+//     try {
+//         var socket = io.connect('http://192.168.56.101:8080');
+//     } catch(e) {
+//         console.log('Error, no connection.');
+//     }
+// })();
+//
+// function move(from, to) {
+//     console.log('move');
+//     if(socket !== undefined) {
+//         content = '--move username ' + to + ' ' + from;
+//         console.log(content);
+//
+//         socket.emit('input', {
+//             message: content
+//         });
+//     }
+// }
+
 $(document).ready(function() {
     createboard();
     placepieces();
@@ -94,6 +114,8 @@ $(document).ready(function() {
         current = $(this);
 
         console.log('To: ' + current.attr('data-gridpos'));
+
+        // move('A1', current.attr('data-gridpos'));
 
         var midX = $(this).position().left += ($(this).width() / 2)
         var midY = $(this).position().top += ($(this).width() / 2);
