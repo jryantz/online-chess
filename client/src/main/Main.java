@@ -13,6 +13,6 @@ public class Main {
 
         Client c = new Client();
 
-    }
+    } // end main.
 
-}
+} // end class Main.
