@@ -1,5 +1,7 @@
 package main;
 
+import javafx.application.Application;
+import chess.GUI;
 import node.Client;
 
 public class Main {
@@ -11,6 +13,7 @@ public class Main {
      */
     public static void main(String[] args) {
 
+        Application.launch(GUI.class);
         Client c = new Client();
 
     } // end main.
