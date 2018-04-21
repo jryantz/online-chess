@@ -1,11 +1,12 @@
 package main;
 
+import ConnectGUI.ConnectionGUI;
 import javafx.application.Application;
 import chess.GUI;
 import node.Client;
 
 public class Main {
-
+    public String userName;
     /**
      * Main method that begins execution of the program.
      *
@@ -13,8 +14,13 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        Application.launch(GUI.class);
-        Client c = new Client();
+      Application.launch(GUI.class);
+      // Application.launch(ConnectionGUI.class);
+
+       // Client c = new Client();
+
+
+
 
     } // end main.
 

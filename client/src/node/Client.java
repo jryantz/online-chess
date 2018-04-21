@@ -1,25 +1,34 @@
 package node;
 
+import ConnectGUI.ConnectionGUI;
+import javafx.application.Application;
+import javafx.scene.control.Label;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
-
+private String Username;
     DataOutputStream output;
 
     /**
      * Prepares the client for execution.
+     * 
      */
     public Client() {
 
         try {
+       
             Socket sock = new Socket("127.0.0.1", 4000);
+
 
             System.out.println("Chess Client Started...");
 
             // Create the receiver thread.
             new Connection(sock);
+
+        
 
             // Setup the output data stream.
             try {
@@ -28,8 +37,12 @@ public class Client {
                 System.out.println("Connection: " + e.getMessage());
             }
 
+
             // Scanner for debug testing (passing test messages to the server).
             Scanner s = new Scanner(new InputStreamReader(System.in));
+
+
+
             while(s.hasNextLine()) {
                 output.writeBytes(s.nextLine() + "\n");
             }
@@ -38,6 +51,7 @@ public class Client {
         }
 
     } // end Client.
+
 
 } // end class Client.
 

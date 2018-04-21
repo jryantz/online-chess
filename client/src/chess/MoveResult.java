@@ -27,10 +27,5 @@ public class MoveResult {
 
     } // end MoveResult.
 
-    public Piece getPiece() {
-
-        return piece;
-
-    } // end getPiece.
 
 } // end class MoveResult.
