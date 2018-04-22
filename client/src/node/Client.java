@@ -1,56 +1,64 @@
 package node;
 
-import ConnectGUI.ConnectionGUI;
+import ConnectGUI.FindaGame;
 import javafx.application.Application;
-import javafx.scene.control.Label;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Client {
 private String Username;
     DataOutputStream output;
+    String connectedClients;
+
 
     /**
      * Prepares the client for execution.
-     * 
+     *
+     * @param
+     * @param username
      */
-    public Client() {
+    public Client(String username) { //Takes in username from GUI
+
 
         try {
-       
+
             Socket sock = new Socket("127.0.0.1", 4000);
 
 
             System.out.println("Chess Client Started...");
 
+
             // Create the receiver thread.
             new Connection(sock);
 
-        
+
 
             // Setup the output data stream.
             try {
                 output = new DataOutputStream(sock.getOutputStream());
+
             } catch (IOException e) {
                 System.out.println("Connection: " + e.getMessage());
             }
 
 
             // Scanner for debug testing (passing test messages to the server).
-            Scanner s = new Scanner(new InputStreamReader(System.in));
+          //  Scanner s = new Scanner(new InputStreamReader(System.in));
 
+           //while(s.hasNextLine()) {
+               output.writeBytes(username+ "\n"); //Sends the username that was typed in the GUI to the server
+          //  }
 
-
-            while(s.hasNextLine()) {
-                output.writeBytes(s.nextLine() + "\n");
-            }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
 
     } // end Client.
+
 
 
 } // end class Client.
@@ -59,6 +67,7 @@ class Connection extends Thread {
 
     Socket serverSocket;
     String fromClient;
+    public String connectedClients;
 
     /**
      * Constructor for building the connection.
@@ -66,10 +75,13 @@ class Connection extends Thread {
      * Starts the thread.
      *
      * @param incomingSocket the socket that connects to the server.
+     * @param
      */
-    public Connection (Socket incomingSocket) {
+    public Connection(Socket incomingSocket) {
 
         serverSocket = incomingSocket;
+
+
 
         this.start();
 
@@ -79,16 +91,17 @@ class Connection extends Thread {
      * Begin execution of the receiver thread.
      */
     public void run() {
-
+        BufferedReader in;
         boolean cont = true;
 
         try {
             while (cont) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 
-                if((fromClient = in.readLine()) != null) {
-                    System.out.println(fromClient);
-                }
+              in= new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
+
+                fromClient = in.readLine();
+                    System.out.print(fromClient + " ");
+
             }
         } catch (IOException e) {
             System.out.println("Error.");
@@ -98,5 +111,15 @@ class Connection extends Thread {
         System.exit(0);
 
     } // end run.
+
+    /**
+     * A method for returning the names of clients.
+     * @param fromClient
+     * @return
+     */
+    public String getConnectedClients(String fromClient) {
+        connectedClients=fromClient;
+        return connectedClients;
+    } //end getConnectedClients
 
 } // end class Connection.
