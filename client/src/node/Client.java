@@ -2,6 +2,7 @@ package node;
 
 import ConnectGUI.FindaGame;
 import javafx.application.Application;
+import main.Main;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -66,7 +67,7 @@ private String Username;
 class Connection extends Thread {
 
     Socket serverSocket;
-    String fromClient;
+    String fromServer;
     public String connectedClients;
 
     /**
@@ -99,8 +100,23 @@ class Connection extends Thread {
 
               in= new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 
-                fromClient = in.readLine();
-                    System.out.print(fromClient + " ");
+                fromServer = in.readLine();
+
+                if (fromServer.startsWith("--")) {
+                    String[] command = fromServer.toLowerCase().substring(2).split(" ");
+
+                    System.out.println("Command");
+
+                    if (command[0].equalsIgnoreCase("alert")) {
+                        // Do nothing, just print...
+                        System.out.println(fromServer.substring(8));
+                    } else if (command[0].equalsIgnoreCase("names")) {
+                        Main.setNames(fromServer.substring(8));
+                        System.out.println("I AM THE GOD: " + Main.getNames());
+                    }
+                }
+
+                //System.out.print(fromServer + " ");
 
             }
         } catch (IOException e) {
@@ -118,8 +134,10 @@ class Connection extends Thread {
      * @return
      */
     public String getConnectedClients(String fromClient) {
+
         connectedClients=fromClient;
         return connectedClients;
-    } //end getConnectedClients
+
+    } // end getConnectedClients.
 
 } // end class Connection.
