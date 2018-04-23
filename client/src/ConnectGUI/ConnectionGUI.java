@@ -15,6 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import main.Main;
 import node.Client;
 
 /**
@@ -76,6 +77,20 @@ public class ConnectionGUI extends Application {
             if(userNameTextField.getText() != null && !userNameTextField.getText().trim().isEmpty()){
                 setUsername(userNameTextField.getText());
                 client = new Client(s); //---client class! Connecting to the server
+
+                while (Main.getNames() == null) {
+
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+
+                    if (Main.getNames() != null) {
+                        System.out.println(Main.getNames());
+                    }
+
+                }
             }
         });
 
