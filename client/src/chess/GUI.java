@@ -17,12 +17,6 @@ public class GUI extends Application {
     private Group tileGroup = new Group(); // GUI TILE.
     private Group pieceGroup = new Group(); // GUI PIECES SIT ON TOP OF TILE.
 
-    public GUI() {
-
-
-
-    } // end GUI;
-
     /**
      * This method helps create the board for the GUI. With this method, tile coordinates are also set,
      * where the pieces from the PieceTypes and Piece class are created and placed on the board. This method
@@ -159,7 +153,8 @@ public class GUI extends Application {
      */
     private MoveResult tryMove(Piece piece, int newX, int newY) {
 
-        if (board[newX][newY].hasPiece()) { // If there is a piece to move (sets to even pieces too).
+        // If there is a piece to move, move it.
+        if (board[newX][newY].hasPiece()) {
             return new MoveResult(MoveType.NONE);
         }
 
@@ -171,7 +166,8 @@ public class GUI extends Application {
             return new MoveResult(MoveType.NORMAL);
         }
 
-        return new MoveResult(MoveType.NONE); // If player has not done anything, do not move anything.
+        // If player has not done anything, do not move anything.
+        return new MoveResult(MoveType.NONE);
 
     } // end tryMove.
 
