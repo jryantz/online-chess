@@ -173,8 +173,8 @@ public class Piece extends StackPane {
             piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
             piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
             getChildren().addAll(piece);
-
         }
+
         setOnMousePressed(e -> {
             MousepressX = e.getSceneX();
             MousepressY = e.getSceneY();

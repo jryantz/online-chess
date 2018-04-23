@@ -38,12 +38,11 @@ public class Server {
 
 class Connection extends Thread {
 
-
     String fromClient;
     DataOutputStream output;
     Socket clientSocket;
 
-    int userSize=1;
+    int userSize = 1;
 
     HashMap<String, ArrayList> games = new HashMap<>();
     HashMap<String, Socket> users = new HashMap<>();
@@ -58,8 +57,6 @@ class Connection extends Thread {
      */
     public Connection(Socket incomingClientSocket, HashMap<String, Socket> Users) {
 
-
-
         try {
             clientSocket = incomingClientSocket;
             users = Users;
@@ -69,8 +66,6 @@ class Connection extends Thread {
             output = new DataOutputStream(clientSocket.getOutputStream());
 
             this.start();
-
-
 
         } catch (IOException e) {
             System.out.println("Connection: " + e.getMessage());
@@ -97,8 +92,8 @@ class Connection extends Thread {
                 if (fromClient != null) {
                     System.out.println("Received: " + fromClient);
 
-                    users.put(fromClient,clientSocket); //puts all those connected in the Hashmap
-                    users=getRecentUsersConnections(users); //gets recent connected people
+                    users.put(fromClient, clientSocket); //puts all those connected in the Hashmap
+                    users = getRecentUsersConnections(users); //gets recent connected people
                     sendUserstoAllUsers(users); //method call to send clients only the names of all connected users
 
                     if (fromClient.equalsIgnoreCase("exit")) {
@@ -144,10 +139,11 @@ class Connection extends Thread {
 
     /**
      * This method gets an updated hashmap of the connected users
+     *
      * @param users
      * @return
      */
-    public HashMap<String, Socket> getRecentUsersConnections(HashMap<String,Socket> users) {
+    public HashMap<String, Socket> getRecentUsersConnections(HashMap<String, Socket> users) {
         return users;
     } //end getRecentUsersConnections
 
@@ -155,6 +151,7 @@ class Connection extends Thread {
      * This method sends all of the connected users in the server the names of the connected users.
      * StringJoiner is used to send a full string of names to the clients. If there is only 1 person
      * in the hashmap, the server is put into a "waiting" state
+     *
      * @param users
      */
     public void sendUserstoAllUsers(HashMap<String, Socket> users) {
@@ -163,7 +160,7 @@ class Connection extends Thread {
 
         ArrayList<Socket> storeClientInfo = new ArrayList<>();
         ArrayList<String> ListNames = new ArrayList<>();
-        String names=null;
+        String names = null;
 
         try {
 
@@ -176,27 +173,27 @@ class Connection extends Thread {
             System.out.println(ListNames.toString());
 
 
-            StringJoiner joinNames =  new StringJoiner(",");  //string of connected users of all the clients
-            for(int j=0; j<ListNames.size(); j++) {
+            StringJoiner joinNames = new StringJoiner(",");  //string of connected users of all the clients
+            for (int j = 0; j < ListNames.size(); j++) {
 
                 names = ListNames.get(j);
                 joinNames.add(names);
             }
             names = joinNames.toString();
 
-            for(int i=0; i<storeClientInfo.size(); i++) {
+            for (int i = 0; i < storeClientInfo.size(); i++) {
                 Socket s = storeClientInfo.get(i);
                 output = new DataOutputStream(s.getOutputStream());
                 if (storeClientInfo.size() == 1) {
                     String waiting = "Waiting for others to connect";
-                    output.writeBytes(waiting + "\n");
-                } else{
-                    output.writeBytes(names + "\n"); //Sends the usernames of all those connected to the client
-                   }
+                    output.writeBytes("--alert " + waiting + "\n");
+                } else {
+                    output.writeBytes("--names " + names + "\n"); //Sends the usernames of all those connected to the client
+                }
 
             }
 
-            } catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
