@@ -6,7 +6,9 @@ import chess.GUI;
 import node.Client;
 
 public class Main {
-    public String userName;
+
+    private static String names;
+
     /**
      * Main method that begins execution of the program.
      *
@@ -24,5 +26,17 @@ public class Main {
 
 
     } // end main.
+
+    public static void setNames(String in) {
+
+        names = in;
+
+    } // end setNames.
+
+    public static String getNames() {
+
+        return names;
+
+    } // end getNames.
 
 } // end class Main.
