@@ -1,9 +1,7 @@
 package ConnectGUI;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -12,11 +10,8 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -24,24 +19,17 @@ import javafx.stage.Stage;
 import main.Main;
 import node.Client;
 
-import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * This class is used to for the client to connect to the server. The client class is also created in here.
  */
 public class ConnectionGUI extends Application {
-    private Group LoginGroup = new Group(); // GUI TILE.
-    private Group BackgroundGroup = new Group(); // GUI PIECES SIT ON TOP OF TILE.
     public String userName;
-    public String connectedClients;
     Client client;
-    private Scene scene2;
     private String s;
     ObservableList<String> connectedUseres;
     private Labeled notifyListChanges;
-    private List storeNames;
     private String newNames ="";
     private String oldNames ="";
 
@@ -89,9 +77,26 @@ public class ConnectionGUI extends Application {
         notifyListChanges.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
         root.add(notifyListChanges,4,9);
 
+        Label playWithUser = new Label("Choosen Chess Opponent ");
+        ListView<String> playWithUserBox1 =new ListView<>();
+        playWithUserBox1.setPrefSize(25,25);
+        VBox playwithUserBox = new VBox();
+        playwithUserBox.setAlignment(Pos.BOTTOM_CENTER);
+        root.add(playWithUser, 4,8);
+        playwithUserBox.getChildren().add(playWithUserBox1);
+        root.add(playwithUserBox, 4,10);
+
+        Button playChess = new Button();
+        playChess.setAlignment(Pos.BOTTOM_CENTER);
+        playChess.setText("Play Chess");
+        root.add(playChess, 4,14);
+
+
+
+
 
         Label justOnlineUsers = new Label("Online Users ");
-        root.add(justOnlineUsers,4,7);
+        root.add(justOnlineUsers,4,5);
 
         //just creates a blank list
         connectedUseres= FXCollections.observableArrayList(); //will contain connected users
@@ -103,9 +108,7 @@ public class ConnectionGUI extends Application {
         selectUserse.setAlignment(Pos.BOTTOM_CENTER);
         selectUserse.getChildren().addAll(listOfOnlineUsers);
 
-
-       // root.addColumn(6, selectUserse);
-        root.add(selectUserse,4,5);
+        root.add(selectUserse,4,6);
 
 
         Button btn = new Button();

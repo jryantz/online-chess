@@ -1,11 +1,7 @@
 package node;
 
-import ConnectGUI.FindaGame;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import main.Main;
 
 import java.io.BufferedReader;
