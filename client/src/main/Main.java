@@ -2,12 +2,12 @@ package main;
 
 import ConnectGUI.ConnectionGUI;
 import javafx.application.Application;
-import chess.GUI;
-import node.Client;
+import javafx.beans.value.ObservableValue;
 
 public class Main {
 
     private static String names;
+    private static ObservableValue<? extends String> observeNames;
 
     /**
      * Main method that begins execution of the program.
@@ -38,5 +38,6 @@ public class Main {
         return names;
 
     } // end getNames.
+
 
 } // end class Main.

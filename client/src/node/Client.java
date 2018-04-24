@@ -2,6 +2,10 @@ package node;
 
 import ConnectGUI.FindaGame;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import main.Main;
 
 import java.io.BufferedReader;
@@ -9,21 +13,24 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.List;
 
 public class Client {
 private String Username;
     DataOutputStream output;
     String connectedClients;
+    ObservableList<String> connectedUseres;
 
 
     /**
      * Prepares the client for execution.
-     *
      * @param
      * @param username
+     * @param connectedUseres
      */
-    public Client(String username) { //Takes in username from GUI
-
+    public Client(String username, ObservableList<String> connectedUseres) { //Takes in username from GUI
+       this.connectedUseres=connectedUseres;
 
         try {
 
@@ -34,7 +41,7 @@ private String Username;
 
 
             // Create the receiver thread.
-            new Connection(sock);
+            new Connection(sock,connectedUseres);
 
 
 
@@ -68,20 +75,20 @@ class Connection extends Thread {
 
     Socket serverSocket;
     String fromServer;
-    public String connectedClients;
+    ObservableList<String> connectedUseres;
 
     /**
      * Constructor for building the connection.
      * Prepares the client socken and the input/output stream.
      * Starts the thread.
-     *
+     *  @param
      * @param incomingSocket the socket that connects to the server.
-     * @param
+     * @param connectedUseres
      */
-    public Connection(Socket incomingSocket) {
+    public Connection(Socket incomingSocket, ObservableList<String> connectedUseres) {
 
         serverSocket = incomingSocket;
-
+        this.connectedUseres=connectedUseres;
 
 
         this.start();
@@ -112,11 +119,12 @@ class Connection extends Thread {
                         System.out.println(fromServer.substring(8));
                     } else if (command[0].equalsIgnoreCase("names")) {
                         Main.setNames(fromServer.substring(8));
-                        System.out.println("I AM THE GOD: " + Main.getNames());
+
+                        //update GUI of newly connected clients
+                     getConnectedClients(Main.getNames(), connectedUseres);
                     }
                 }
 
-                //System.out.print(fromServer + " ");
 
             }
         } catch (IOException e) {
@@ -129,15 +137,31 @@ class Connection extends Thread {
     } // end run.
 
     /**
-     * A method for returning the names of clients.
+     * A method for setting the names of clients inside the GUI! This
+     * method is constantly called in the thread to update the GUI properly.
      * @param fromClient
+     * @param connectedUseres
      * @return
      */
-    public String getConnectedClients(String fromClient) {
+    public static void getConnectedClients(String fromClient, ObservableList<String> connectedUseres) {
+        if(Main.getNames()!=null) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    if(Main.getNames()!=null) {
+                        connectedUseres.removeAll(connectedUseres);
+                        String str = Main.getNames();
+                        List<String> namesList = Arrays.asList(str.split(",")); //splits the received names
+                        for(int i=0; i<namesList.size(); i++){
+                            str= (String) namesList.get(i);
+                            connectedUseres.add(str); //adds them to the list
+                        }
+                    }
+                }
+            });
 
-        connectedClients=fromClient;
-        return connectedClients;
-
+            System.out.println("I AM THE GOD: " + Main.getNames());
+        }
     } // end getConnectedClients.
 
 } // end class Connection.
