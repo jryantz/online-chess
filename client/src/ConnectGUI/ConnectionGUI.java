@@ -1,6 +1,8 @@
 package ConnectGUI;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -29,6 +31,7 @@ public class ConnectionGUI extends Application {
     Client client;
     private String s;
     ObservableList<String> connectedUseres;
+    ObservableList<String> chosenUser;
     private Labeled notifyListChanges;
     private String newNames ="";
     private String oldNames ="";
@@ -41,7 +44,7 @@ public class ConnectionGUI extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Scene scene = new Scene(createContent(primaryStage, userName),500,500);
+        Scene scene = new Scene(createContent(primaryStage, userName),500,600);
 
         primaryStage.setTitle("FSU Chess Client");
         primaryStage.setScene(scene);
@@ -76,9 +79,10 @@ public class ConnectionGUI extends Application {
         notifyListChanges = new Label();
         notifyListChanges.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
         root.add(notifyListChanges,4,9);
-
-        Label playWithUser = new Label("Choosen Chess Opponent ");
-        ListView<String> playWithUserBox1 =new ListView<>();
+        //------------------------GUI STUFF FOR PLAYING CHESS BUTTON AND SELECTING OPPONENNT
+        Label playWithUser = new Label("Chosen Chess Opponent ");
+        chosenUser= FXCollections.observableArrayList(); //will contain connected users
+        ListView<String> playWithUserBox1 =new ListView<>(chosenUser);
         playWithUserBox1.setPrefSize(25,25);
         VBox playwithUserBox = new VBox();
         playwithUserBox.setAlignment(Pos.BOTTOM_CENTER);
@@ -94,7 +98,7 @@ public class ConnectionGUI extends Application {
 
 
 
-
+        //--------------GUI STUFF FOR THE TABLE OF CONNECTED USERS, ONLINE USERS LABEL, USERNAME LABEL, & Connect button
         Label justOnlineUsers = new Label("Online Users ");
         root.add(justOnlineUsers,4,5);
 
@@ -142,9 +146,24 @@ public class ConnectionGUI extends Application {
                             //when user hits "submit"
                             btn.setDisable(true);
                     }
-                }
+
+
+                        listOfOnlineUsers.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+                            @Override
+                            public void changed(ObservableValue<? extends String> observable, String oldValue, String connectedUseres) {
+                                System.out.println("ListView selection changed from oldValue = "
+                                        + oldValue + " to newValue = " + connectedUseres);
+                                chosenUser.removeAll(chosenUser);
+                                chosenUser.add(connectedUseres);
+                            }
+                        });
+
+                    }
+
 
                }
+
+
 
             }
         });

@@ -1,7 +1,10 @@
 package node;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
 import main.Main;
 
 import java.io.BufferedReader;
@@ -13,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Client {
-private String Username;
+    private String Username;
     DataOutputStream output;
     String connectedClients;
     ObservableList<String> connectedUseres;
@@ -27,7 +30,6 @@ private String Username;
      */
     public Client(String username, ObservableList<String> connectedUseres) { //Takes in username from GUI
        this.connectedUseres=connectedUseres;
-
         try {
 
             Socket sock = new Socket("127.0.0.1", 4000);
@@ -69,6 +71,7 @@ private String Username;
 
 class Connection extends Thread {
 
+
     Socket serverSocket;
     String fromServer;
     ObservableList<String> connectedUseres;
@@ -77,9 +80,10 @@ class Connection extends Thread {
      * Constructor for building the connection.
      * Prepares the client socken and the input/output stream.
      * Starts the thread.
-     *  @param
+     * @param
      * @param incomingSocket the socket that connects to the server.
      * @param connectedUseres
+
      */
     public Connection(Socket incomingSocket, ObservableList<String> connectedUseres) {
 
@@ -117,7 +121,7 @@ class Connection extends Thread {
                         Main.setNames(fromServer.substring(8));
 
                         //update GUI of newly connected clients
-                     getConnectedClients(Main.getNames(), connectedUseres);
+                     getConnectedClients(connectedUseres);
                     }
                 }
 
@@ -135,11 +139,10 @@ class Connection extends Thread {
     /**
      * A method for setting the names of clients inside the GUI! This
      * method is constantly called in the thread to update the GUI properly.
-     * @param fromClient
      * @param connectedUseres
      * @return
      */
-    public static void getConnectedClients(String fromClient, ObservableList<String> connectedUseres) {
+    public static void getConnectedClients(ObservableList<String> connectedUseres) {
         if(Main.getNames()!=null) {
             Platform.runLater(new Runnable() {
                 @Override
@@ -152,6 +155,7 @@ class Connection extends Thread {
                             str= (String) namesList.get(i);
                             connectedUseres.add(str); //adds them to the list
                         }
+
                     }
                 }
             });
