@@ -3,6 +3,7 @@ package main;
 import ConnectGUI.ConnectionGUI;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
+import node.Client;
 
 public class Main {
 
@@ -16,14 +17,11 @@ public class Main {
      */
     public static void main(String[] args) {
 
-     // Application.launch(GUI.class);
+        //Application.launch(GUI.class);
 
-      Application.launch(ConnectionGUI.class);
+        Application.launch(ConnectionGUI.class);
 
-       // Client c = new Client();
-
-
-
+        //Client c = new Client();
 
     } // end main.
 
@@ -38,6 +36,5 @@ public class Main {
         return names;
 
     } // end getNames.
-
 
 } // end class Main.

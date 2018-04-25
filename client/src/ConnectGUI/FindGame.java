@@ -11,19 +11,19 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class FindaGame extends Application {
-
+public class FindGame extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        Scene scene2 = new Scene(nextContent(primaryStage), 700, 600);
+    public void start(Stage primaryStage) {
+
+        Scene scene2 = new Scene(nextContent(), 700, 600);
         scene2.getStylesheets().add(ConnectionGUI.class.getResource("ConnectionGUI.css").toExternalForm());
-        
 
         primaryStage.show();
-    }
 
-    private Parent nextContent(Stage primaryStage) {
+    } // end start.
+
+    private Parent nextContent() {
 
         GridPane root = new GridPane();
 
@@ -37,5 +37,7 @@ public class FindaGame extends Application {
         // clients.add();
 
         return root;
-    }
-}
+
+    } // end nextContent.
+
+} // end class FindGame.
