@@ -2,12 +2,10 @@ package main;
 
 import gui.connect.ConnectionGUI;
 import javafx.application.Application;
-import javafx.beans.value.ObservableValue;
 
 public class Main {
 
     private static String names;
-    private static ObservableValue<? extends String> observeNames;
 
     /**
      * Main method that begins execution of the program.
