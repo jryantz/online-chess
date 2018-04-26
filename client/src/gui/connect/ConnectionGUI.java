@@ -31,8 +31,9 @@ public class ConnectionGUI extends Application {
 
     ObservableList<String> connectedUsers;
     ObservableList<String> chosenUser;
-    ObservableList<String> pickYesOrNo;
-    Boolean usersChoice=false;
+
+    ObservableList<String> userDecisionOnGameList;
+    Boolean usersChoice = false;
 
     private Labeled notifyListChanges;
     private String newNames = "";
@@ -142,28 +143,25 @@ public class ConnectionGUI extends Application {
         submitButton.setText("Submit");
         root.add(submitButton, 4, 4);
 
-        Label showUsersWantToPlace = new Label();
-        showUsersWantToPlace.setText(  "You have a request!! Want to play?");
+        Label wantToPlayChessLabel = new Label();
+        wantToPlayChessLabel.setText("Someone wants to play chess with you, want to play?");
 
+        // CHESS GAME REQUEST STUFF.
+        userDecisionOnGameList = FXCollections.observableArrayList(); // Will contain connected users.
+        VBox userDecisionOnGameBox = new VBox();
 
-    //Things for SAYING YES OR NO TO CHESS REQUEST-----------------------------------------------------
-        pickYesOrNo = FXCollections.observableArrayList(); // Will contain connected users.
-        VBox yesOrNo = new VBox();
+        ListView<String> userDecisionOnGameListView = new ListView(userDecisionOnGameList);
+        userDecisionOnGameListView.setOrientation(Orientation.VERTICAL);
+        userDecisionOnGameListView.setPrefSize(20, 20);
 
-        ListView<String> yesOrNoList = new ListView(pickYesOrNo);
-        yesOrNoList.setOrientation(Orientation.VERTICAL);
-        yesOrNoList.setPrefSize(20, 20);
+        userDecisionOnGameBox.setAlignment(Pos.BOTTOM_CENTER);
+        userDecisionOnGameBox.getChildren().addAll(userDecisionOnGameListView);
+        root.add(userDecisionOnGameBox, 4, 16);
 
-        yesOrNo.setAlignment(Pos.BOTTOM_CENTER);
-        yesOrNo.getChildren().addAll(yesOrNoList);
-        root.add(yesOrNo, 4, 16);
-
-
-        Button submitButton2 = new Button(); //Button at bottom to send players response if they want to play game
-        submitButton2.setText("~Response~");
-        root.add(submitButton2, 4, 20);
-        submitButton2.setDisable(true);
-
+        Button userDecisionOnGameSubmitButton = new Button(); // Button at bottom to send players response if they want to play game.
+        userDecisionOnGameSubmitButton.setText("~Response~");
+        root.add(userDecisionOnGameSubmitButton, 4, 20);
+        userDecisionOnGameSubmitButton.setDisable(true);
 
         root.setAlignment(Pos.TOP_CENTER);
 
@@ -176,8 +174,7 @@ public class ConnectionGUI extends Application {
 
                 setUsername(usernameTextField.getText());
 
-                c = new Client(inputtedUsername, connectedUsers,pickYesOrNo);
-
+                c = new Client(inputtedUsername, connectedUsers, userDecisionOnGameList);
 
                 while (Main.getNames() == null) {
 
@@ -214,36 +211,47 @@ public class ConnectionGUI extends Application {
 
         });
 
+//        if (userDecisionOnGameListView != null) {
+//            userDecisionOnGameListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, choice) -> {
+//
+//                System.out.println("userDecisionOnGameList selection changed from oldValue = " + oldValue + " to newValue = " + choice);
+//
+//                if (choice == "Yes") {
+//                    userDecisionOnGameSubmitButton.setDisable(false);
+//                    playChess.setDisable(true);
+//                    usersChoice = true;
+//                } else {
+//                    userDecisionOnGameSubmitButton.setDisable(false);
+//                    usersChoice = false;
+//                }
+//
+//            });
+//        }
 
-        if( yesOrNoList!=null) {
+        userDecisionOnGameSubmitButton.setOnAction(event -> {
 
+            if (userDecisionOnGameListView != null) {
+                userDecisionOnGameListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, choice) -> {
 
-            yesOrNoList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, choice) -> {
+                    System.out.println("userDecisionOnGameList selection changed from oldValue = " + oldValue + " to newValue = " + choice);
 
-                System.out.println("yesOrNoList selection changed from oldValue = " + oldValue + " to newValue = " + choice);
-                if(choice=="Yes"){
+                    if (choice == "Yes") {
+                        userDecisionOnGameSubmitButton.setDisable(false);
+                        playChess.setDisable(true);
+                        usersChoice = true;
+                    } else {
+                        userDecisionOnGameSubmitButton.setDisable(false);
+                        usersChoice = false;
+                    }
 
-                    submitButton2.setDisable(false);
-                    playChess.setDisable(true);
-                    usersChoice=true;
-                }else{
+                });
+            }
 
-                    submitButton2.setDisable(false);
-                    usersChoice=false;
-                }
-            });
-        }
-
-
-        submitButton2.setOnAction(event -> {
             System.out.println(usersChoice + " to the player of " + Main.getUserWhoPlay());
-           // c.sendAcceptOrRejectToServer(usersChoice,Main.getUserWhoPlay());
-             submitButton2.setDisable(true);
+            c.sendAcceptOrRejectToServer(usersChoice, Main.getUserWhoPlay());
+            userDecisionOnGameSubmitButton.setDisable(true);
+
         });
-
-
-
-
 
         return root;
 
