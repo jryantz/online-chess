@@ -9,7 +9,7 @@
     -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-display: block;
-    -fx-text-fill: rgba(36, 198, 244, 1.5);
+    -fx-text-fill: rgba(36, 198, 244, 1);
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1);
 }
 
@@ -19,11 +19,11 @@
     -fx-font-weight: bold;
     -fx-font-family: "Arial";
     -fx-border-color: black;
-    -fx-background-color: rgba(36, 198, 244, 1.5);
+    -fx-background-color: rgba(36, 198, 244, 1);
     -fx-display: block;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1);
 }
 
 .button:hover {
-    -fx-background-color: green;
+    -fx-background-color: rgba(255, 140, 0, 1);
 }
