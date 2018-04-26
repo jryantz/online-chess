@@ -7,18 +7,18 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class GUI extends Application {
+public class GameGUI extends Application {
 
-    public static final int TILE_SIZE = 100; // GUI TILE.
-    public static final int WIDTH = 8; // FOR GUI. DEFINES WIDTH AND HEIGHT FOR TILE.
-    public static final int HEIGHT = 8; // GUI TILE.
+    public static final int TILE_SIZE = 100; // GameGUI TILE.
+    public static final int WIDTH = 8; // FOR GameGUI. DEFINES WIDTH AND HEIGHT FOR TILE.
+    public static final int HEIGHT = 8; // GameGUI TILE.
 
-    private Tile[][] board = new Tile[WIDTH][HEIGHT]; // TILE GUI.
-    private Group tileGroup = new Group(); // GUI TILE.
-    private Group pieceGroup = new Group(); // GUI PIECES SIT ON TOP OF TILE.
+    private Tile[][] board = new Tile[WIDTH][HEIGHT]; // TILE GameGUI.
+    private Group tileGroup = new Group(); // GameGUI TILE.
+    private Group pieceGroup = new Group(); // GameGUI PIECES SIT ON TOP OF TILE.
 
     /**
-     * This method helps create the board for the GUI. With this method, tile coordinates are also set,
+     * This method helps create the board for the GameGUI. With this method, tile coordinates are also set,
      * where the pieces from the PieceTypes and Piece class are created and placed on the board. This method
      * essentially just provides the initial board with the pieces when a client starts the game. Given the
      * X,Y coordinates, the pieces are placed on the board.
@@ -186,7 +186,7 @@ public class GUI extends Application {
     } // end toBoard.
 
     /**
-     * This is a method for the GUI! Starts the stage!
+     * This is a method for the GameGUI! Starts the stage!
      *
      * @param primaryStage
      * @throws Exception

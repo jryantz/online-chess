@@ -5,10 +5,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-import static gui.chess.GUI.TILE_SIZE;
+import static gui.chess.GameGUI.TILE_SIZE;
 
 /**
- * The piece class is super important for GUI and movement stuff. The Pieces in the piece class are defined based
+ * The piece class is super important for GameGUI and movement stuff. The Pieces in the piece class are defined based
  * on the enum PieceType. How each piece looks is set in the Piece constructor below. This class also
  * gets the mouse presses (old clicks to new clicks) from the board.
  */
