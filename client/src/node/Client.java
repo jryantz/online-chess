@@ -34,8 +34,9 @@ public class Client {
 
         try {
 
-            //Socket sock = new Socket("127.0.0.1", 4000);
-            Socket sock = new Socket("10.20.234.175", 4000);
+            Socket sock = new Socket("127.0.0.1", 4000);
+            //Socket sock = new Socket("10.20.234.175", 4000);
+
             System.out.println("Chess Client Started...");
 
             // Create the receiver thread.
@@ -69,7 +70,7 @@ public class Client {
     public void sendGameRequestToServer(String usernameOfPlayerToJoin) {
 
         try {
-            output.writeBytes("--join " + username + " " + usernameOfPlayerToJoin);
+            output.writeBytes("--join " + username + " " + usernameOfPlayerToJoin + "\n");
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -139,6 +140,8 @@ class Connection extends Thread {
                         Main.setNames(fromServer.substring(8));
 
                         getConnectedClients(connectedUsers, thisUser); // Update the GUI to show all the clients.
+                    } else if (command[0].equalsIgnoreCase("request")) {
+                        System.out.println(command[1] + " would like to play chess with you.");
                     }
                 }
 
