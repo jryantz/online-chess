@@ -101,7 +101,7 @@ public class ConnectionGUI extends Application {
         // GUI STUFF FOR 'PLAYING CHESS BUTTON' AND 'SELECTING OPPONENT'.
         Label playWithUser = new Label("Chosen Chess Opponent: ");
 
-        chosenUser = FXCollections.observableArrayList(); //will contain connected users
+        chosenUser = FXCollections.observableArrayList(); // Will contain connected users.
 
         ListView<String> playWithUserBox1 = new ListView<>(chosenUser);
         playWithUserBox1.setPrefSize(25, 25);
