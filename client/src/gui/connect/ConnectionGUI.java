@@ -141,6 +141,7 @@ public class ConnectionGUI extends Application {
         root.add(submitButton, 4, 4);
 
         // Put popup here for checking if user can play.
+        // c.sendAcceptOrRejectToServer
 
         root.setAlignment(Pos.TOP_CENTER);
 

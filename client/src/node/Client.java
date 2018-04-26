@@ -77,6 +77,30 @@ public class Client {
 
     } // end sendGameRequestToServer.
 
+    /**
+     * Takes in parameters based on user input and emits to the server, conditionally.
+     *
+     * @param accept true if the user accepted and false if the user rejected.
+     * @param usernameOfRequestingPlayer the username of the player that initiated the request.
+     */
+    public void sendAcceptOrRejectToServer(boolean accept, String usernameOfRequestingPlayer) {
+
+        if (accept) {
+            try {
+                output.writeBytes("--accept " + username + " " + usernameOfRequestingPlayer + "\n");
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            try {
+                output.writeBytes("--reject " + username + " " + usernameOfRequestingPlayer + "\n");
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+    } // end sendAcceptOrRejectToServer
+
 } // end class Client.
 
 class Connection extends Thread {
