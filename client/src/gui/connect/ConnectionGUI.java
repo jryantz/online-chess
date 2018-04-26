@@ -140,6 +140,8 @@ public class ConnectionGUI extends Application {
         submitButton.setText("Submit");
         root.add(submitButton, 4, 4);
 
+
+
         root.setAlignment(Pos.TOP_CENTER);
 
         // When the button is pressed, the textfield will be checked if empty and then gui.connect to the server if not.

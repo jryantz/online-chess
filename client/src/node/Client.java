@@ -34,8 +34,8 @@ public class Client {
 
         try {
 
-            Socket sock = new Socket("127.0.0.1", 4000);
-
+            //Socket sock = new Socket("127.0.0.1", 4000);
+            Socket sock = new Socket("10.20.234.175", 4000);
             System.out.println("Chess Client Started...");
 
             // Create the receiver thread.
