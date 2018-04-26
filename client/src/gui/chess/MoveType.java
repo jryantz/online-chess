@@ -1,4 +1,4 @@
-package chess;
+package gui.chess;
 
 /**
  * This enum specifies MoveTypes. So here, NormalRook, or NormalPawn, etc should be specified. KilledKing may

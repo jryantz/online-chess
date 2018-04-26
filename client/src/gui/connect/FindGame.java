@@ -1,4 +1,4 @@
-package ConnectGUI;
+package gui.connect;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;

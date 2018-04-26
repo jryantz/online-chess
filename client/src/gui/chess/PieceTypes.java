@@ -1,4 +1,4 @@
-package chess;
+package gui.chess;
 
 public enum PieceTypes {
 

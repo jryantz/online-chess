@@ -1,4 +1,4 @@
-package chess;
+package gui.chess;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

@@ -1,12 +1,11 @@
-package chess;
+package gui.chess;
 
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 
-import static chess.GUI.TILE_SIZE;
+import static gui.chess.GUI.TILE_SIZE;
 
 /**
  * The piece class is super important for GUI and movement stuff. The Pieces in the piece class are defined based

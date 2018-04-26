@@ -1,9 +1,8 @@
 package main;
 
-import ConnectGUI.ConnectionGUI;
+import gui.connect.ConnectionGUI;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
-import node.Client;
 
 public class Main {
 

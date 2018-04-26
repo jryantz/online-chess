@@ -1,4 +1,4 @@
-package ConnectGUI;
+package gui.connect;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -21,7 +21,7 @@ import main.Main;
 import node.Client;
 
 /**
- * This class is used to for the client to connect to the server. The client class is also created in here.
+ * This class is used to for the client to gui.connect to the server. The client class is also created in here.
  */
 public class ConnectionGUI extends Application {
 
@@ -141,7 +141,7 @@ public class ConnectionGUI extends Application {
 
         root.setAlignment(Pos.TOP_CENTER);
 
-        // When the button is pressed, the textfield will be checked if empty and then connect to the server if not.
+        // When the button is pressed, the textfield will be checked if empty and then gui.connect to the server if not.
         submitButton.setOnAction(e -> {
 
             inputtedUsername = (usernameTextField.getText());

@@ -1,4 +1,4 @@
-package chess;
+package gui.chess;
 
 import javafx.application.Application;
 import javafx.scene.Group;

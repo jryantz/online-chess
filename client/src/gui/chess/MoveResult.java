@@ -1,4 +1,4 @@
-package chess;
+package gui.chess;
 
 /**
  * This class specifies the MoveResult of a piece (used in the Main class).
