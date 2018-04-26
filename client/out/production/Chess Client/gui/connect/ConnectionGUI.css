@@ -14,8 +14,9 @@
 }
 
 .button {
-    -fx-font-size: 22px;
+    -fx-font-size: 12px;
     -fx-text-fill: black;
+    -fx-pref-width: 100px;
     -fx-font-weight: bold;
     -fx-font-family: "Arial";
     -fx-border-color: black;
