@@ -116,6 +116,7 @@ public class ConnectionGUI extends Application {
         Button playChess = new Button();
         playChess.setAlignment(Pos.BOTTOM_CENTER);
         playChess.setText("Play Chess");
+        playChess.setDisable(true);
         root.add(playChess, 4, 14);
 
         // GUI STUFF FOR THE TABLE OF CONNECTED USERS, ONLINE USERS LABEL, USERNAME LABEL, AND CONNECT BUTTON.
@@ -168,17 +169,8 @@ public class ConnectionGUI extends Application {
                     newNames = oldNames;
                     usernameLabel.setText("Welcome to Chess: " + inputtedUsername + "!"); // Sends greeting.
                     submitButton.setDisable(true); // Disables submit button.
+                    playChess.setDisable(false); // Enables the play chess button.
                 }
-
-//                listOfOnlineUsers.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-//                    @Override
-//                    public void changed(ObservableValue<? extends String> observable, String oldValue, String incomingConnectedUsers) {
-//                        System.out.println("ListView selection changed from oldValue = "
-//                                + oldValue + " to newValue = " + incomingConnectedUsers);
-//                        chosenUser.removeAll(chosenUser);
-//                        chosenUser.add(incomingConnectedUsers);
-//                    }
-//                });
 
                 listOfOnlineUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, incomingConnectedUsers) -> {
                     System.out.println("ListView selection changed from oldValue = " + oldValue + " to newValue = " + incomingConnectedUsers);
@@ -189,7 +181,6 @@ public class ConnectionGUI extends Application {
             }
 
         });
-
 
         return root;
 
