@@ -30,6 +30,7 @@ public class FindGame extends Application {
         root.setPadding(new Insets(25,25,25,25));
         Text sceneTitle =  new Text("Find a Match!");
         sceneTitle.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
+
         Label username = new Label("Welcome ");
         root.add(username,4,0);
 
