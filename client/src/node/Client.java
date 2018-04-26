@@ -1,10 +1,7 @@
 package node;
 
-import gui.connect.AlertBox;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 import main.Main;
 
 import java.io.BufferedReader;
@@ -25,16 +22,14 @@ public class Client {
 
     /**
      * Prepares the client for execution.
-     *  @param
+     *
      * @param incomingUsername
      * @param incomingConnectedUsers
-     * @param pickYesOrNo
+     * @param incomingUserDecisionList
      */
-    public Client(String incomingUsername, ObservableList<String> incomingConnectedUsers, ObservableList<String> pickYesOrNo) { //Takes in username from GUI
+    public Client(String incomingUsername, ObservableList<String> incomingConnectedUsers, ObservableList<String> incomingUserDecisionList) { //Takes in username from GUI
 
         username = incomingUsername;
-        connectedUsers = incomingConnectedUsers;
-        addYesOrNoToList = pickYesOrNo;
 
         try {
 
@@ -44,7 +39,7 @@ public class Client {
             System.out.println("Chess Client Started...");
 
             // Create the receiver thread.
-            new Connection(sock, connectedUsers, username,addYesOrNoToList);
+            new Connection(sock, incomingConnectedUsers, incomingUserDecisionList, username);
 
             // Setup the output data stream.
             try {
@@ -109,31 +104,32 @@ public class Client {
 
 class Connection extends Thread {
 
-    ObservableList<String> addUserDecisionThread;
     Socket serverSocket;
     String fromServer;
 
     ObservableList<String> connectedUsers;
+    ObservableList<String> userDecisionOnGameRequest;
+
     String thisUser;
-    Boolean response = false;
 
     /**
      * Constructor for building the connection.
      * Prepares the client socken and the input/output stream.
      * Starts the thread.
-     *  @param
+     *
      * @param incomingSocket the socket that connects to the server.
      * @param connectedUsersIn
-     * @param addYesOrNoToList
+     * @param userDecisionListIn
+     * @param thisUserIn
      */
-    public Connection(Socket incomingSocket, ObservableList<String> connectedUsersIn, String thisUserIn, ObservableList<String> addYesOrNoToList) {
+    public Connection(Socket incomingSocket, ObservableList<String> connectedUsersIn, ObservableList<String> userDecisionListIn, String thisUserIn) {
 
         serverSocket = incomingSocket;
+
         connectedUsers = connectedUsersIn;
+        userDecisionOnGameRequest = userDecisionListIn;
+
         thisUser = thisUserIn;
-        addUserDecisionThread=addYesOrNoToList;
-
-
 
         this.start();
 
@@ -177,7 +173,7 @@ class Connection extends Thread {
                         System.out.println(command[1] + " would like to play chess with you.");
                         Main.setUserWantsToPlay(command[1]);
 
-                        YesOrNoToList(addUserDecisionThread);
+                        addButtonsToAcceptOrRejectGameRequest(userDecisionOnGameRequest);
                     }
                 }
 
@@ -193,19 +189,27 @@ class Connection extends Thread {
 
     } // end run.
 
-    private void YesOrNoToList(ObservableList<String> pickYesOrNo) {
-        if(Main.getUserWhoPlay() !=null) {
+    private void addButtonsToAcceptOrRejectGameRequest(ObservableList<String> pickYesOrNo) {
+
+        if(Main.getUserWhoPlay() != null) {
+
             Platform.runLater(() -> {
-                if(Main.getUserWhoPlay() !=null) {
-                   // root.add(showUsersWantToPlace, 4, 15);-------FOR GETTING AN ALERT THAT A USER WANTS TO PLAY WITH YOU LATER
+
+                if(Main.getUserWhoPlay() != null) {
+
+                    // Gets an alert that a user wants to play with you.
+                    //root.add(showUsersWantToPlace, 4, 15);
+
                     pickYesOrNo.removeAll(pickYesOrNo);
                     pickYesOrNo.add("Yes");
                     pickYesOrNo.add("No");
+
                 }
+
             });
 
         }
-    }
+    } // end yesOrNoToList.
 
     /**
      * A method for setting the names of clients inside the GUI! This
