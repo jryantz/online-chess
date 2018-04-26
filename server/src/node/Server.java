@@ -110,6 +110,7 @@ class Connection extends Thread {
                             }
 
                             System.out.print("\n");
+                            emitUserList(users);
                         } else if (command[0].equalsIgnoreCase("new")) {
                             System.out.println("Add new user: " + command[1]);
                             users.put(command[1], clientSocket); // Puts the new user in the hashmap.
