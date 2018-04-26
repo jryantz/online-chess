@@ -182,6 +182,11 @@ public class ConnectionGUI extends Application {
 
         });
 
+        playChess.setOnAction(event ->{
+            c.sendGameRequestToServer(chosenUser.get(0));
+
+        });
+
         return root;
 
     } // end createContent.
