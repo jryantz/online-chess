@@ -66,6 +66,16 @@ public class Client {
 
     } // end sendQuitToServer.
 
+    public void sendGameRequestToServer(String usernameOfPlayerToJoin) {
+
+        try {
+            output.writeBytes("--join " + username + " " + usernameOfPlayerToJoin);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+    } // end sendGameRequestToServer.
+
 } // end class Client.
 
 class Connection extends Thread {
