@@ -15,19 +15,20 @@ public class Server {
     public Server() {
 
         try {
+
             int serverPort = 4000;
             ServerSocket serverSocket = new ServerSocket(serverPort);
 
             System.out.println("Chess Server Started...");
 
-            HashMap<String, Socket> Users = new HashMap<>();
+            HashMap<String, Socket> userList = new HashMap<>();
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println(clientSocket.getLocalSocketAddress());
-                Connection c = new Connection(clientSocket, Users);
-
+                new Connection(clientSocket, userList);
             }
+
         } catch (IOException e) {
             System.out.println("Listen: " + e.getMessage());
         }
@@ -39,12 +40,9 @@ public class Server {
 class Connection extends Thread {
 
     String fromClient;
-    DataOutputStream output;
     Socket clientSocket;
+    DataOutputStream output;
 
-    int userSize = 1;
-
-    HashMap<String, ArrayList> games = new HashMap<>();
     HashMap<String, Socket> users = new HashMap<>();
 
     /**
@@ -52,16 +50,17 @@ class Connection extends Thread {
      * Prepares the client socken and the input/output stream.
      * Starts the thread.
      *
-     * @param incomingClientSocket
-     * @param Users
+     * @param incomingClientSocket the socket that will be used to communicate with various users.
+     * @param incomingUserList the list of all users that can be communicated with.
      */
-    public Connection(Socket incomingClientSocket, HashMap<String, Socket> Users) {
+    public Connection(Socket incomingClientSocket, HashMap<String, Socket> incomingUserList) {
 
         try {
-            clientSocket = incomingClientSocket;
-            users = Users;
 
-            System.out.println(clientSocket);
+            clientSocket = incomingClientSocket;
+            users = incomingUserList;
+
+            //System.out.println(clientSocket); // Print the added client socket.
 
             output = new DataOutputStream(clientSocket.getOutputStream());
 
@@ -81,10 +80,10 @@ class Connection extends Thread {
         BufferedReader in;
         boolean cont = true;
 
-
         while (cont) {
 
             try {
+
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
                 fromClient = in.readLine();
@@ -92,30 +91,29 @@ class Connection extends Thread {
                 if (fromClient != null) {
                     System.out.println("Received: " + fromClient);
 
-                    users.put(fromClient, clientSocket); //puts all those connected in the Hashmap
-                    users = getRecentUsersConnections(users); //gets recent connected people
-                    sendUserstoAllUsers(users); //method call to send clients only the names of all connected users
-
-                    if (fromClient.equalsIgnoreCase("exit")) {
-                        try {
-                            clientSocket.close();
-                        } catch (IOException e) {
-                            // Closing failed.
-                        }
-
-                        cont = false;
-                    }
-
                     if (fromClient.startsWith("--")) {
                         String[] command = fromClient.toLowerCase().substring(2).split(" ");
 
-                        System.out.println("Command");
-                        output.writeBytes("[Command] " + command[0] + "\n");
+                        //System.out.println("Command");
+                        //output.writeBytes("[Command] " + command[0] + "\n");
 
-                        if (command[0].equalsIgnoreCase("new")) {
+                        if (command[0].equalsIgnoreCase("exit")) {
+                            System.out.println("Exit user: " + command[1]);
 
-                        } else if (command[0].equalsIgnoreCase("list")) {
+                            users.remove(command[1]);
+                            output.writeBytes("--exit\n");
 
+                            System.out.print("Remaining users: ");
+
+                            for (int i = 0; i < users.size(); i++) {
+                                System.out.print(users.keySet().toArray()[i]);
+                            }
+
+                            System.out.print("\n");
+                        } else if (command[0].equalsIgnoreCase("new")) {
+                            System.out.println("Add new user: " + command[1]);
+                            users.put(command[1], clientSocket); // Puts the new user in the hashmap.
+                            emitUserList(users); // Emit the list of all users to every connected sockets.
                         } else if (command[0].equalsIgnoreCase("join")) {
 
                         } else if (command[0].equalsIgnoreCase("leave")) {
@@ -126,9 +124,9 @@ class Connection extends Thread {
                         }
                     }
                 }
+
             } catch (IOException e) {
-                System.out.println("Error.");
-                e.printStackTrace();
+                System.out.println("Error: " + e.getMessage());
             }
 
         }
@@ -138,57 +136,58 @@ class Connection extends Thread {
     } // end run.
 
     /**
-     * This method gets an updated hashmap of the connected users
-     *
-     * @param users
-     * @return
-     */
-    public HashMap<String, Socket> getRecentUsersConnections(HashMap<String, Socket> users) {
-        return users;
-    } //end getRecentUsersConnections
-
-    /**
      * This method sends all of the connected users in the server the names of the connected users.
      * StringJoiner is used to send a full string of names to the clients. If there is only 1 person
      * in the hashmap, the server is put into a "waiting" state
      *
-     * @param users
+     * @param activeUserList
      */
-    public void sendUserstoAllUsers(HashMap<String, Socket> users) {
+    public void emitUserList(HashMap<String, Socket> activeUserList) {
 
-        DataOutputStream output = null;
+        ArrayList<Socket> clientSockets = new ArrayList<>();
+        ArrayList<String> clientNames = new ArrayList<>();
 
-        ArrayList<Socket> storeClientInfo = new ArrayList<>();
-        ArrayList<String> ListNames = new ArrayList<>();
-        String names = null;
+        String names;
 
         try {
 
-            for (String userName : users.keySet()) {
-                String key = userName.toString();
-                Socket value = users.get(userName);
-                storeClientInfo.add(value);
-                ListNames.add(key); //adds the connections only of the connected users to an array list
+            for (String username : activeUserList.keySet()) {
+
+                String userKey = username.toString();
+                Socket userSocket = activeUserList.get(username);
+
+                clientNames.add(userKey); // Adds the connections only of the connected users to an array list.
+                clientSockets.add(userSocket);
+
             }
-            System.out.println(ListNames.toString());
 
+            System.out.println(clientNames.toString());
 
-            StringJoiner joinNames = new StringJoiner(",");  //string of connected users of all the clients
-            for (int j = 0; j < ListNames.size(); j++) {
+            StringJoiner nameList = new StringJoiner(",");  // String of connected users of all the clients.
 
-                names = ListNames.get(j);
-                joinNames.add(names);
+            for (int j = 0; j < clientNames.size(); j++) {
+
+                String current = clientNames.get(j);
+                nameList.add(current);
+
             }
-            names = joinNames.toString();
 
-            for (int i = 0; i < storeClientInfo.size(); i++) {
-                Socket s = storeClientInfo.get(i);
-                output = new DataOutputStream(s.getOutputStream());
-                if (storeClientInfo.size() == 1) {
-                    String waiting = "Waiting for others to connect";
-                    output.writeBytes("--alert " + waiting + "\n");
+            names = nameList.toString();
+
+            for (int i = 0; i < clientSockets.size(); i++) {
+
+                Socket s = clientSockets.get(i);
+                DataOutputStream sender = new DataOutputStream(s.getOutputStream());
+
+                System.out.println(s);
+
+                if (clientSockets.size() == 1) {
+                    String waiting = "Waiting for other users to connect.";
+                    sender.writeBytes("--alert " + waiting + "\n");
                 } else {
-                    output.writeBytes("--names " + names + "\n"); //Sends the usernames of all those connected to the client
+                    System.out.println("--names " + names);
+                    sender.writeBytes("--names " + names + "\n"); // Sends the usernames of all those connected to the client
+                    sender.flush();
                 }
 
             }
@@ -198,7 +197,7 @@ class Connection extends Thread {
         }
 
 
-    } //End method sendUserstoAllUsers
+    } // end emitUserList.
 
 } // end class Connection.
 
