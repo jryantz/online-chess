@@ -116,6 +116,13 @@ class Connection extends Thread {
                             users.put(command[1], clientSocket); // Puts the new user in the hashmap.
                             emitUserList(users); // Emit the list of all users to every connected sockets.
                         } else if (command[0].equalsIgnoreCase("join")) {
+                            System.out.println(command[1] + " wants to play chess with " + command[2] + ".");
+
+                            DataOutputStream requestPlay = new DataOutputStream(users.get(command[2]).getOutputStream());
+                            requestPlay.writeBytes("--request " + command[1] + "\n");
+                        } else if (command[0].equalsIgnoreCase("accept")) {
+
+                        } else if (command[0].equalsIgnoreCase("reject")) {
 
                         } else if (command[0].equalsIgnoreCase("leave")) {
 
