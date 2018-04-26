@@ -6,6 +6,7 @@ import javafx.application.Application;
 public class Main {
 
     private static String names;
+    private static String UserWantsPlay;
 
     /**
      * Main method that begins execution of the program.
@@ -17,6 +18,7 @@ public class Main {
         //Application.launch(GameGUI.class);
 
         Application.launch(ConnectionGUI.class);
+
 
         //Client c = new Client();
 
@@ -33,5 +35,14 @@ public class Main {
         return names;
 
     } // end getNames.
+
+    public static void setUserWantsToPlay(String user){
+        UserWantsPlay=user;
+    }
+
+    public static String getUserWhoPlay(){
+        return UserWantsPlay;
+    }
+
 
 } // end class Main.

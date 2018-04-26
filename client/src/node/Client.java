@@ -1,7 +1,10 @@
 package node;
 
+import gui.connect.AlertBox;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import main.Main;
 
 import java.io.BufferedReader;
@@ -11,10 +14,10 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class Client {
 
+    ObservableList<String> addYesOrNoToList;
     DataOutputStream output;
 
     String username;
@@ -22,15 +25,16 @@ public class Client {
 
     /**
      * Prepares the client for execution.
-     *
-     * @param
+     *  @param
      * @param incomingUsername
      * @param incomingConnectedUsers
+     * @param pickYesOrNo
      */
-    public Client(String incomingUsername, ObservableList<String> incomingConnectedUsers) { //Takes in username from GUI
+    public Client(String incomingUsername, ObservableList<String> incomingConnectedUsers, ObservableList<String> pickYesOrNo) { //Takes in username from GUI
 
         username = incomingUsername;
         connectedUsers = incomingConnectedUsers;
+        addYesOrNoToList = pickYesOrNo;
 
         try {
 
@@ -40,7 +44,7 @@ public class Client {
             System.out.println("Chess Client Started...");
 
             // Create the receiver thread.
-            new Connection(sock, connectedUsers, username);
+            new Connection(sock, connectedUsers, username,addYesOrNoToList);
 
             // Setup the output data stream.
             try {
@@ -105,26 +109,31 @@ public class Client {
 
 class Connection extends Thread {
 
+    ObservableList<String> addUserDecisionThread;
     Socket serverSocket;
     String fromServer;
 
     ObservableList<String> connectedUsers;
     String thisUser;
+    Boolean response = false;
 
     /**
      * Constructor for building the connection.
      * Prepares the client socken and the input/output stream.
      * Starts the thread.
-     *
-     * @param
+     *  @param
      * @param incomingSocket the socket that connects to the server.
      * @param connectedUsersIn
+     * @param addYesOrNoToList
      */
-    public Connection(Socket incomingSocket, ObservableList<String> connectedUsersIn, String thisUserIn) {
+    public Connection(Socket incomingSocket, ObservableList<String> connectedUsersIn, String thisUserIn, ObservableList<String> addYesOrNoToList) {
 
         serverSocket = incomingSocket;
         connectedUsers = connectedUsersIn;
         thisUser = thisUserIn;
+        addUserDecisionThread=addYesOrNoToList;
+
+
 
         this.start();
 
@@ -166,6 +175,9 @@ class Connection extends Thread {
                         getConnectedClients(connectedUsers, thisUser); // Update the GUI to show all the clients.
                     } else if (command[0].equalsIgnoreCase("request")) {
                         System.out.println(command[1] + " would like to play chess with you.");
+                        Main.setUserWantsToPlay(command[1]);
+
+                        YesOrNoToList(addUserDecisionThread);
                     }
                 }
 
@@ -180,6 +192,20 @@ class Connection extends Thread {
         System.exit(0);
 
     } // end run.
+
+    private void YesOrNoToList(ObservableList<String> pickYesOrNo) {
+        if(Main.getUserWhoPlay() !=null) {
+            Platform.runLater(() -> {
+                if(Main.getUserWhoPlay() !=null) {
+                   // root.add(showUsersWantToPlace, 4, 15);-------FOR GETTING AN ALERT THAT A USER WANTS TO PLAY WITH YOU LATER
+                    pickYesOrNo.removeAll(pickYesOrNo);
+                    pickYesOrNo.add("Yes");
+                    pickYesOrNo.add("No");
+                }
+            });
+
+        }
+    }
 
     /**
      * A method for setting the names of clients inside the GUI! This

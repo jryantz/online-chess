@@ -31,6 +31,8 @@ public class ConnectionGUI extends Application {
 
     ObservableList<String> connectedUsers;
     ObservableList<String> chosenUser;
+    ObservableList<String> pickYesOrNo;
+    Boolean usersChoice=false;
 
     private Labeled notifyListChanges;
     private String newNames = "";
@@ -140,8 +142,28 @@ public class ConnectionGUI extends Application {
         submitButton.setText("Submit");
         root.add(submitButton, 4, 4);
 
-        // Put popup here for checking if user can play.
-        // c.sendAcceptOrRejectToServer
+        Label showUsersWantToPlace = new Label();
+        showUsersWantToPlace.setText(  "You have a request!! Want to play?");
+
+
+    //Things for SAYING YES OR NO TO CHESS REQUEST-----------------------------------------------------
+        pickYesOrNo = FXCollections.observableArrayList(); // Will contain connected users.
+        VBox yesOrNo = new VBox();
+
+        ListView<String> yesOrNoList = new ListView(pickYesOrNo);
+        yesOrNoList.setOrientation(Orientation.VERTICAL);
+        yesOrNoList.setPrefSize(20, 20);
+
+        yesOrNo.setAlignment(Pos.BOTTOM_CENTER);
+        yesOrNo.getChildren().addAll(yesOrNoList);
+        root.add(yesOrNo, 4, 16);
+
+
+        Button submitButton2 = new Button(); //Button at bottom to send players response if they want to play game
+        submitButton2.setText("~Response~");
+        root.add(submitButton2, 4, 20);
+        submitButton2.setDisable(true);
+
 
         root.setAlignment(Pos.TOP_CENTER);
 
@@ -154,7 +176,8 @@ public class ConnectionGUI extends Application {
 
                 setUsername(usernameTextField.getText());
 
-                c = new Client(inputtedUsername, connectedUsers);
+                c = new Client(inputtedUsername, connectedUsers,pickYesOrNo);
+
 
                 while (Main.getNames() == null) {
 
@@ -190,6 +213,37 @@ public class ConnectionGUI extends Application {
             c.sendGameRequestToServer(chosenUser.get(0));
 
         });
+
+
+        if( yesOrNoList!=null) {
+
+
+            yesOrNoList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, choice) -> {
+
+                System.out.println("yesOrNoList selection changed from oldValue = " + oldValue + " to newValue = " + choice);
+                if(choice=="Yes"){
+
+                    submitButton2.setDisable(false);
+                    playChess.setDisable(true);
+                    usersChoice=true;
+                }else{
+
+                    submitButton2.setDisable(false);
+                    usersChoice=false;
+                }
+            });
+        }
+
+
+        submitButton2.setOnAction(event -> {
+            System.out.println(usersChoice + " to the player of " + Main.getUserWhoPlay());
+           // c.sendAcceptOrRejectToServer(usersChoice,Main.getUserWhoPlay());
+             submitButton2.setDisable(true);
+        });
+
+
+
+
 
         return root;
 
