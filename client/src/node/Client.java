@@ -1,6 +1,7 @@
 package node;
 
 import gui.chess.GameGUI;
+import gui.chess.UserColor;
 import gui.connect.ConnectionGUI;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -83,10 +84,11 @@ public class Client {
      * @param usernameOfRequestingPlayer the username of the player that initiated the request.
      */
     public void sendAcceptOrRejectToServer(boolean accept, String usernameOfRequestingPlayer) {
+        UserColor.settingUserColor();
 
         if (accept) {
             try {
-                output.writeBytes("--accept " + username + " " + usernameOfRequestingPlayer + "\n");
+                output.writeBytes("--accept " + username + " " + usernameOfRequestingPlayer + " " + UserColor.getUserColor() + "\n");
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -172,13 +174,13 @@ class Connection extends Thread {
 
                         updateUserWantsToPlayLabel();
                     } else if (command[0].equalsIgnoreCase("accept")) {
-                        System.out.println("Game accepted.");
+                        //Made a new array because I did not know if it would be confusing to use command
+                        String[] otherUserColor = fromServer.substring(2).split(" ");
+                        System.out.println("Game accepted. User is " + otherUserColor[1]);
 
-                        launchChessGame();
+                        launchChessGame(otherUserColor[1]);
                     }
                 }
-
-
             }
 
         } catch (IOException e) {
@@ -190,9 +192,11 @@ class Connection extends Thread {
 
     } // end run.
 
-    private void launchChessGame() {
+
+    private void launchChessGame(String otherUserColor) {
 
         Platform.runLater(() -> {
+            UserColor.setUserColor(otherUserColor);
 
             new GameGUI().start(new Stage());
             ConnectionGUI.primaryStage.hide();
@@ -200,6 +204,8 @@ class Connection extends Thread {
         });
 
     } // end launchChessGame.
+
+
 
     private void updateUserWantsToPlayLabel() {
 

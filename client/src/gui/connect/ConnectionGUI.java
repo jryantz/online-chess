@@ -1,6 +1,7 @@
 package gui.connect;
 
 import gui.chess.GameGUI;
+import gui.chess.UserColor;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -218,8 +219,8 @@ public class ConnectionGUI extends Application {
         userDecisionYesSubmitButton.setOnAction(event -> {
 
             c.sendAcceptOrRejectToServer(true, Main.getRequestingUser());
-
             Main.setRequestingUser(null);
+
 
             playChessButton.setDisable(true);
             wantToPlayChessLabel.setText("Joining chess game...");

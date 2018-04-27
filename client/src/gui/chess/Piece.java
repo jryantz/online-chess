@@ -15,6 +15,7 @@ import static gui.chess.GameGUI.TILE_SIZE;
 public class Piece extends StackPane {
 
     private PieceTypes type;
+    private static String colorforCheck;
     private double MousepressX, MousepressY; // REMEMBER MOUSE CLICK COORDINATES.
     private double OldMousePressX, OldMousePressY; // Old coordinates.
 
@@ -41,17 +42,19 @@ public class Piece extends StackPane {
     /**
      * Helps design certain pieces based on type. This also gets the movement.
      *
+     * @param color
      * @param type
      * @param x
      * @param y
      */
-    public Piece(PieceTypes type, int x, int y) {
+    public Piece(String color, PieceTypes type, int x, int y) {
+
 
         this.type = type;
 
         if (type == PieceTypes.BLACK_PAWN) {
             Image img = new Image("/images/tronpawn3.png");
-            move(PieceTypes.BLACK_PAWN,x, y);
+            move(PieceTypes.BLACK_PAWN, x, y);
             Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
             piece.setFill(new ImagePattern(img));
             piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
@@ -61,7 +64,7 @@ public class Piece extends StackPane {
 
         if (type == PieceTypes.BLACK_ROOK) {
             Image img = new Image("/images/tronrook2.png");
-            move(PieceTypes.BLACK_ROOK,x, y);
+            move(PieceTypes.BLACK_ROOK, x, y);
             Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
             piece.setFill(new ImagePattern(img));
             piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
@@ -71,7 +74,7 @@ public class Piece extends StackPane {
 
         if (type == PieceTypes.BLACK_KNIGHT) {
             Image img = new Image("/images/tronknight2.png");
-            move(PieceTypes.BLACK_KNIGHT,x, y);
+            move(PieceTypes.BLACK_KNIGHT, x, y);
             Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
             piece.setFill(new ImagePattern(img));
             piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
@@ -81,7 +84,7 @@ public class Piece extends StackPane {
 
         if (type == PieceTypes.BLACK_BISHOP) {
             Image img = new Image("/images/tronbishop2.png");
-            move(PieceTypes.BLACK_BISHOP,x, y);
+            move(PieceTypes.BLACK_BISHOP, x, y);
             Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
             piece.setFill(new ImagePattern(img));
             piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
@@ -91,7 +94,7 @@ public class Piece extends StackPane {
 
         if (type == PieceTypes.BLACK_QUEEN) {
             Image img = new Image("/images/tronqueen2.png");
-            move(PieceTypes.BLACK_QUEEN,x, y);
+            move(PieceTypes.BLACK_QUEEN, x, y);
             Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
             piece.setFill(new ImagePattern(img));
             piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
@@ -101,7 +104,7 @@ public class Piece extends StackPane {
 
         if (type == PieceTypes.BLACK_KING) {
             Image img = new Image("/images/tronking2.png");
-            move(PieceTypes.BLACK_KING,x, y);
+            move(PieceTypes.BLACK_KING, x, y);
             Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
             piece.setFill(new ImagePattern(img));
             piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
@@ -114,7 +117,7 @@ public class Piece extends StackPane {
         if (type == PieceTypes.WHITE_PAWN) {
             Image img = new Image("/images/tronpawn2.png");
 
-            move(PieceTypes.WHITE_PAWN,x, y);
+            move(PieceTypes.WHITE_PAWN, x, y);
 
             Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
             piece.setFill(new ImagePattern(img));
@@ -125,7 +128,7 @@ public class Piece extends StackPane {
 
         if (type == PieceTypes.WHITE_QUEEN) {
             Image img = new Image("/images/tronqueen.png");
-            move(PieceTypes.WHITE_QUEEN,x, y);
+            move(PieceTypes.WHITE_QUEEN, x, y);
             Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
             piece.setFill(new ImagePattern(img));
             piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
@@ -135,7 +138,7 @@ public class Piece extends StackPane {
 
         if (type == PieceTypes.WHITE_KING) {
             Image img = new Image("/images/tronking.png");
-            move(PieceTypes.WHITE_KING,x, y);
+            move(PieceTypes.WHITE_KING, x, y);
             Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
             piece.setFill(new ImagePattern(img));
             piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
@@ -145,7 +148,7 @@ public class Piece extends StackPane {
 
         if (type == PieceTypes.WHITE_BISHOP) {
             Image img = new Image("/images/tronbishop.png");
-            move(PieceTypes.WHITE_BISHOP,x, y);
+            move(PieceTypes.WHITE_BISHOP, x, y);
             Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
             piece.setFill(new ImagePattern(img));
             piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
@@ -155,7 +158,7 @@ public class Piece extends StackPane {
 
         if (type == PieceTypes.WHITE_ROOK) {
             Image img = new Image("/images/tronrook.png");
-            move(PieceTypes.WHITE_ROOK,x, y);
+            move(PieceTypes.WHITE_ROOK, x, y);
             Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
             piece.setFill(new ImagePattern(img));
             piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
@@ -165,7 +168,7 @@ public class Piece extends StackPane {
 
         if (type == PieceTypes.WHITE_KNIGHT) {
             Image img = new Image("/images/tronknight.png");
-            move(PieceTypes.WHITE_KNIGHT,x, y);
+            move(PieceTypes.WHITE_KNIGHT, x, y);
 
             Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
             piece.setFill(new ImagePattern(img));
@@ -174,20 +177,25 @@ public class Piece extends StackPane {
             getChildren().addAll(piece);
         }
 
-        setOnMousePressed(e -> {
-            MousepressX = e.getSceneX();
-            MousepressY = e.getSceneY();
-           //
-            System.out.println(type + " ORIGINAL MOUSE PRESS BEFORE MOVE X" + OldMousePressX + " ORIGINAL MOUSE PRESS BEFORE MOVE Y" + OldMousePressY);
+            //SET PIECE TYPE COLOR
+            setPieceColorType(type);
 
-        });
+                setOnMousePressed(e -> {
+                    MousepressX = e.getSceneX();
+                    MousepressY = e.getSceneY();
+                    System.out.println(type + " ORIGINAL MOUSE PRESS BEFORE MOVE X" + OldMousePressX + " ORIGINAL MOUSE PRESS BEFORE MOVE Y" + OldMousePressY);
+                });
 
-        setOnMouseDragged(e -> {
-            relocate(e.getSceneX() - MousepressX + OldMousePressX, e.getSceneY() - MousepressY + OldMousePressY);
 
-        });
+            //GET PIECE TYPE COLOR THAT THE USER CLICKS ON BEFORE DRAG AND SEE IF IT MATCHES USER COLOR
+                if(color.equals(getPieceColorType())) {
+                    setOnMouseDragged(e -> {
+                        relocate(e.getSceneX() - MousepressX + OldMousePressX, e.getSceneY() - MousepressY + OldMousePressY);
 
+                    });
+                }
     } // end Piece.
+
 
     /**
      * Method for moving pieces based on mouse clicks.
@@ -197,17 +205,30 @@ public class Piece extends StackPane {
      */
     public void move(PieceTypes type, int x, int y) {
 
-        OldMousePressX = x * TILE_SIZE;
-        OldMousePressY = y * TILE_SIZE;
-        System.out.println(type + " AFTER PIECE HAS MOVED X" + OldMousePressX + " AFTER PIECE HAS MOVED Y" + OldMousePressY);
-        relocate(OldMousePressX, OldMousePressY);
+
+            OldMousePressX = x * TILE_SIZE;
+            OldMousePressY = y * TILE_SIZE;
+            System.out.println(type + " AFTER PIECE HAS MOVED X" + OldMousePressX + " AFTER PIECE HAS MOVED Y" + OldMousePressY);
+            relocate(OldMousePressX, OldMousePressY);
+
 
     } // end move.
 
 
+    public  void setPieceColorType(PieceTypes pieceType){
+
+        if(pieceType.equals(PieceTypes.BLACK_BISHOP) || pieceType.equals(PieceTypes.BLACK_KING) || pieceType.equals(PieceTypes.BLACK_KNIGHT)||
+                pieceType.equals(PieceTypes.BLACK_ROOK) || pieceType.equals(PieceTypes.BLACK_QUEEN) || pieceType.equals(PieceTypes.BLACK_PAWN)){
+            colorforCheck = "BLACK";
+        }else{
+            colorforCheck="WHITE";
+        }
+    }
 
 
-
+    public static String getPieceColorType(){
+        return  colorforCheck;
+    }
 
     /**
      * This method relcoates the old coordinates if the user cancels their move.

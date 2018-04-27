@@ -42,6 +42,8 @@ class Connection extends Thread {
     String fromClient;
     Socket clientSocket;
     DataOutputStream output;
+    private static String userColor;
+
 
     HashMap<String, Socket> users = new HashMap<>();
 
@@ -121,10 +123,20 @@ class Connection extends Thread {
                             DataOutputStream requestPlay = new DataOutputStream(users.get(command[2]).getOutputStream());
                             requestPlay.writeBytes("--request " + command[1] + "\n");
                         } else if (command[0].equalsIgnoreCase("accept")) {
-                            System.out.println(command[1] + " accepted to play a game with " + command[2] + ".");
-
+                            String[] getColor = fromClient.substring(2).split(" "); //getting the color out of the response.
+                            //// Made a new array because I did not know if it would be confusing to use command
+                            String color = getColor[3];
+                            System.out.println(command[1] +  " is color : " +  getColor[3] + " and accepted to play a game with " + command[2] + ".");
                             DataOutputStream acceptPlay = new DataOutputStream(users.get(command[2]).getOutputStream());
-                            acceptPlay.writeBytes("--accept\n");
+
+                            if(color.startsWith("BL")){ //Had to do startsWith because it was not recognizing black for some reason
+                                userColor="WHITE";
+                            }else{
+                                userColor="BLACK";
+                            }
+                            System.out.println(userColor);
+                            acceptPlay.writeBytes("--accept " + userColor + "\n");
+
                         } else if (command[0].equalsIgnoreCase("reject")) {
                             System.out.println(command[1] + " rejected the game with " + command[2] + ".");
 
@@ -212,6 +224,7 @@ class Connection extends Thread {
 
 
     } // end emitUserList.
+
 
 } // end class Connection.
 
