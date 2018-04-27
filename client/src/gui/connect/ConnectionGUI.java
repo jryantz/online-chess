@@ -1,10 +1,9 @@
 package gui.connect;
 
+import gui.chess.GameGUI;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -25,6 +24,8 @@ import node.Client;
  */
 public class ConnectionGUI extends Application {
 
+    public static Stage primaryStage;
+
     Client c;
 
     private String inputtedUsername;
@@ -36,8 +37,6 @@ public class ConnectionGUI extends Application {
     public static Label wantToPlayChessLabel;
     public static Button userDecisionYesSubmitButton;
     public static Button userDecisionNoSubmitButton;
-
-    //boolean userDecisionOnGameRequest = false;
 
     private Labeled notifyListChanges;
     private String newNames = "";
@@ -61,6 +60,8 @@ public class ConnectionGUI extends Application {
 
         primaryStage.show();
 
+        this.primaryStage = primaryStage;
+
     } // end start.
 
     @Override
@@ -73,12 +74,6 @@ public class ConnectionGUI extends Application {
         }
 
     } // end stop.
-
-    public void exitApplication(ActionEvent event) {
-
-        Platform.exit();
-
-    } // end exitApplication.
 
     /**
      * This method creates the textfield, text, etc. portions for the GUI. The method
@@ -230,6 +225,9 @@ public class ConnectionGUI extends Application {
             wantToPlayChessLabel.setText("Joining chess game...");
             userDecisionYesSubmitButton.setDisable(true);
             userDecisionNoSubmitButton.setDisable(true);
+
+            new GameGUI().start(new Stage());
+            primaryStage.hide();
 
         });
 
