@@ -219,8 +219,8 @@ public class ConnectionGUI extends Application {
         userDecisionYesSubmitButton.setOnAction(event -> {
 
             c.sendAcceptOrRejectToServer(true, Main.getRequestingUser());
-            Main.setRequestingUser(null);
 
+            Main.setRequestingUser(null);
 
             playChessButton.setDisable(true);
             wantToPlayChessLabel.setText("Joining chess game...");

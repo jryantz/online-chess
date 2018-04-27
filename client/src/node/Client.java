@@ -84,6 +84,7 @@ public class Client {
      * @param usernameOfRequestingPlayer the username of the player that initiated the request.
      */
     public void sendAcceptOrRejectToServer(boolean accept, String usernameOfRequestingPlayer) {
+
         UserColor.settingUserColor();
 
         if (accept) {
@@ -196,6 +197,7 @@ class Connection extends Thread {
     private void launchChessGame(String otherUserColor) {
 
         Platform.runLater(() -> {
+
             UserColor.setUserColor(otherUserColor);
 
             new GameGUI().start(new Stage());
@@ -204,8 +206,6 @@ class Connection extends Thread {
         });
 
     } // end launchChessGame.
-
-
 
     private void updateUserWantsToPlayLabel() {
 

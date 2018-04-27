@@ -15,7 +15,9 @@ import static gui.chess.GameGUI.TILE_SIZE;
 public class Piece extends StackPane {
 
     private PieceTypes type;
+
     private static String colorforCheck;
+
     private double MousepressX, MousepressY; // REMEMBER MOUSE CLICK COORDINATES.
     private double OldMousePressX, OldMousePressY; // Old coordinates.
 
@@ -167,6 +169,7 @@ public class Piece extends StackPane {
         }
 
         if (type == PieceTypes.WHITE_KNIGHT) {
+
             Image img = new Image("/images/tronknight.png");
             move(PieceTypes.WHITE_KNIGHT, x, y);
 
@@ -175,27 +178,30 @@ public class Piece extends StackPane {
             piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
             piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
             getChildren().addAll(piece);
+
         }
 
-            //SET PIECE TYPE COLOR
-            setPieceColorType(type);
+        //SET PIECE TYPE COLOR
+        setPieceColorType(type);
 
-                setOnMousePressed(e -> {
-                    MousepressX = e.getSceneX();
-                    MousepressY = e.getSceneY();
-                    System.out.println(type + " ORIGINAL MOUSE PRESS BEFORE MOVE X" + OldMousePressX + " ORIGINAL MOUSE PRESS BEFORE MOVE Y" + OldMousePressY);
-                });
+        setOnMousePressed(e -> {
 
+            MousepressX = e.getSceneX();
+            MousepressY = e.getSceneY();
+            System.out.println(type + " ORIGINAL MOUSE PRESS BEFORE MOVE X" + OldMousePressX + " ORIGINAL MOUSE PRESS BEFORE MOVE Y" + OldMousePressY);
 
-            //GET PIECE TYPE COLOR THAT THE USER CLICKS ON BEFORE DRAG AND SEE IF IT MATCHES USER COLOR
-                if(color.equals(getPieceColorType())) {
-                    setOnMouseDragged(e -> {
-                        relocate(e.getSceneX() - MousepressX + OldMousePressX, e.getSceneY() - MousepressY + OldMousePressY);
+        });
 
-                    });
-                }
+        //GET PIECE TYPE COLOR THAT THE USER CLICKS ON BEFORE DRAG AND SEE IF IT MATCHES USER COLOR
+        if(color.equals(getPieceColorType())) {
+
+            setOnMouseDragged(e -> {
+                relocate(e.getSceneX() - MousepressX + OldMousePressX, e.getSceneY() - MousepressY + OldMousePressY);
+
+            });
+
+        }
     } // end Piece.
-
 
     /**
      * Method for moving pieces based on mouse clicks.
@@ -205,30 +211,30 @@ public class Piece extends StackPane {
      */
     public void move(PieceTypes type, int x, int y) {
 
-
-            OldMousePressX = x * TILE_SIZE;
-            OldMousePressY = y * TILE_SIZE;
-            System.out.println(type + " AFTER PIECE HAS MOVED X" + OldMousePressX + " AFTER PIECE HAS MOVED Y" + OldMousePressY);
-            relocate(OldMousePressX, OldMousePressY);
-
+        OldMousePressX = x * TILE_SIZE;
+        OldMousePressY = y * TILE_SIZE;
+        System.out.println(type + " AFTER PIECE HAS MOVED X" + OldMousePressX + " AFTER PIECE HAS MOVED Y" + OldMousePressY);
+        relocate(OldMousePressX, OldMousePressY);
 
     } // end move.
 
 
-    public  void setPieceColorType(PieceTypes pieceType){
+    public void setPieceColorType(PieceTypes pieceType) {
 
-        if(pieceType.equals(PieceTypes.BLACK_BISHOP) || pieceType.equals(PieceTypes.BLACK_KING) || pieceType.equals(PieceTypes.BLACK_KNIGHT)||
-                pieceType.equals(PieceTypes.BLACK_ROOK) || pieceType.equals(PieceTypes.BLACK_QUEEN) || pieceType.equals(PieceTypes.BLACK_PAWN)){
+        if (pieceType.equals(PieceTypes.BLACK_BISHOP) || pieceType.equals(PieceTypes.BLACK_KING) || pieceType.equals(PieceTypes.BLACK_KNIGHT) || pieceType.equals(PieceTypes.BLACK_ROOK) || pieceType.equals(PieceTypes.BLACK_QUEEN) || pieceType.equals(PieceTypes.BLACK_PAWN)) {
             colorforCheck = "BLACK";
-        }else{
-            colorforCheck="WHITE";
+        } else {
+            colorforCheck = "WHITE";
         }
-    }
+
+    } // end setPieceColorType
 
 
     public static String getPieceColorType(){
+
         return  colorforCheck;
-    }
+
+    } // end getPieceColorType.
 
     /**
      * This method relcoates the old coordinates if the user cancels their move.

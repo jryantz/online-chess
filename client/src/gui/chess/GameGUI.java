@@ -14,8 +14,6 @@ public class GameGUI extends Application {
     public static final int WIDTH = 8; // FOR GameGUI. DEFINES WIDTH AND HEIGHT FOR TILE.
     public static final int HEIGHT = 8; // GameGUI TILE.
 
-
-
     private Tile[][] board = new Tile[WIDTH][HEIGHT]; // TILE GameGUI.
     private Group tileGroup = new Group(); // GameGUI TILE.
     private Group pieceGroup = new Group(); // GameGUI PIECES SIT ON TOP OF TILE.
@@ -109,11 +107,7 @@ public class GameGUI extends Application {
      */
     private Piece createPieces(PieceTypes type, int x, int y) {
 
-
-
         String color = UserColor.getUserColor();
-
-
 
         Piece piece = new Piece(color,type, x, y);
 
@@ -133,10 +127,10 @@ public class GameGUI extends Application {
                     break;
                 case NORMAL:
 
-                        piece.move(type, newCoordinateX, newCoordinateY); //GETS NEW COORDINATES FOR THE MOVED PIECES---------------------------
+                    piece.move(type, newCoordinateX, newCoordinateY); // Get new coords for moved piece.
 
-                    //    board[OldCoordinateX][OldCoordinateY].setPiece(null);  --------PREVENTS
-                    //   board[newCoordinateX][newCoordinateY].setPiece(piece);  --------- OVERLAPPING
+                    //board[OldCoordinateX][OldCoordinateY].setPiece(null);  --------PREVENTS
+                    //board[newCoordinateX][newCoordinateY].setPiece(piece);  --------- OVERLAPPING
                     break;
             }
         });
@@ -171,9 +165,9 @@ public class GameGUI extends Application {
 
         // This if statement allows the pieces to move 7 spaces per move (not specified for the rules yet).
 
-            if (newY - y0 == 0 || newY - y0 <= 7) { // Move Direction checks to see how the pieces are moving (down or up).
-                return new MoveResult(MoveType.NORMAL);
-            }
+        if (newY - y0 == 0 || newY - y0 <= 7) { // Move Direction checks to see how the pieces are moving (down or up).
+            return new MoveResult(MoveType.NORMAL);
+        }
 
         // If player has not done anything, do not move anything.
         return new MoveResult(MoveType.NONE);

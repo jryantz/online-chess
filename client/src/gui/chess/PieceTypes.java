@@ -7,9 +7,10 @@ public enum PieceTypes {
 
     final int moveDirection;
 
-    PieceTypes(int moveDirection){
-        this.moveDirection = moveDirection;
-    }
+    PieceTypes(int moveDirection) {
 
+        this.moveDirection = moveDirection;
+
+    }
 
 } // end class PieceTypes.
