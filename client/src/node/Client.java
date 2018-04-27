@@ -1,8 +1,10 @@
 package node;
 
+import gui.chess.GameGUI;
 import gui.connect.ConnectionGUI;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 import main.Main;
 
 import java.io.BufferedReader;
@@ -169,6 +171,10 @@ class Connection extends Thread {
                         Main.setRequestingUser(command[1]);
 
                         updateUserWantsToPlayLabel();
+                    } else if (command[0].equalsIgnoreCase("accept")) {
+                        System.out.println("Game accepted.");
+
+                        launchChessGame();
                     }
                 }
 
@@ -184,7 +190,18 @@ class Connection extends Thread {
 
     } // end run.
 
-    public void updateUserWantsToPlayLabel() {
+    private void launchChessGame() {
+
+        Platform.runLater(() -> {
+
+            new GameGUI().start(new Stage());
+            ConnectionGUI.primaryStage.hide();
+
+        });
+
+    } // end launchChessGame.
+
+    private void updateUserWantsToPlayLabel() {
 
         Platform.runLater(() -> {
 
