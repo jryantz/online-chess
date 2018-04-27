@@ -1,5 +1,6 @@
 package node;
 
+import gui.connect.ConnectionGUI;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import main.Main;
@@ -14,20 +15,17 @@ import java.util.List;
 
 public class Client {
 
-    ObservableList<String> addYesOrNoToList;
     DataOutputStream output;
 
     String username;
-    ObservableList<String> connectedUsers;
 
     /**
      * Prepares the client for execution.
      *
      * @param incomingUsername
      * @param incomingConnectedUsers
-     * @param incomingUserDecisionList
      */
-    public Client(String incomingUsername, ObservableList<String> incomingConnectedUsers, ObservableList<String> incomingUserDecisionList) { //Takes in username from GUI
+    public Client(String incomingUsername, ObservableList<String> incomingConnectedUsers) {
 
         username = incomingUsername;
 
@@ -39,7 +37,7 @@ public class Client {
             System.out.println("Chess Client Started...");
 
             // Create the receiver thread.
-            new Connection(sock, incomingConnectedUsers, incomingUserDecisionList, username);
+            new Connection(sock, incomingConnectedUsers, username);
 
             // Setup the output data stream.
             try {
@@ -108,7 +106,6 @@ class Connection extends Thread {
     String fromServer;
 
     ObservableList<String> connectedUsers;
-    ObservableList<String> userDecisionOnGameRequest;
 
     String thisUser;
 
@@ -119,15 +116,13 @@ class Connection extends Thread {
      *
      * @param incomingSocket the socket that connects to the server.
      * @param connectedUsersIn
-     * @param userDecisionListIn
      * @param thisUserIn
      */
-    public Connection(Socket incomingSocket, ObservableList<String> connectedUsersIn, ObservableList<String> userDecisionListIn, String thisUserIn) {
+    public Connection(Socket incomingSocket, ObservableList<String> connectedUsersIn, String thisUserIn) {
 
         serverSocket = incomingSocket;
 
         connectedUsers = connectedUsersIn;
-        userDecisionOnGameRequest = userDecisionListIn;
 
         thisUser = thisUserIn;
 
@@ -171,9 +166,10 @@ class Connection extends Thread {
                         getConnectedClients(connectedUsers, thisUser); // Update the GUI to show all the clients.
                     } else if (command[0].equalsIgnoreCase("request")) {
                         System.out.println(command[1] + " would like to play chess with you.");
-                        Main.setUserWantsToPlay(command[1]);
+                        Main.setRequestingUser(command[1]);
 
-                        addButtonsToAcceptOrRejectGameRequest(userDecisionOnGameRequest);
+                        //addButtonsToAcceptOrRejectGameRequest(userDecisionOnGameRequest);
+                        updateUserWantsToPlayLabel(command[1]);
                     }
                 }
 
@@ -189,27 +185,18 @@ class Connection extends Thread {
 
     } // end run.
 
-    private void addButtonsToAcceptOrRejectGameRequest(ObservableList<String> pickYesOrNo) {
+    public void updateUserWantsToPlayLabel(String user) {
 
-        if(Main.getUserWhoPlay() != null) {
+        Platform.runLater(() -> {
 
-            Platform.runLater(() -> {
+            ConnectionGUI.playChessButton.setDisable(true);
+            ConnectionGUI.wantToPlayChessLabel.setText(user + " wants to play chess with you!");
+            ConnectionGUI.userDecisionYesSubmitButton.setDisable(false);
+            ConnectionGUI.userDecisionNoSubmitButton.setDisable(false);
 
-                if(Main.getUserWhoPlay() != null) {
+        });
 
-                    // Gets an alert that a user wants to play with you.
-                    //root.add(showUsersWantToPlace, 4, 15);
-
-                    pickYesOrNo.removeAll(pickYesOrNo);
-                    pickYesOrNo.add("Yes");
-                    pickYesOrNo.add("No");
-
-                }
-
-            });
-
-        }
-    } // end yesOrNoToList.
+    } // end updateUserWantsToPlayLabel.
 
     /**
      * A method for setting the names of clients inside the GUI! This
