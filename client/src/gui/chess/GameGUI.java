@@ -1,5 +1,6 @@
 package gui.chess;
 
+import gui.connect.ConnectionGUI;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -135,8 +136,6 @@ public class GameGUI extends Application {
 
     } // end makePieces.
 
-
-
     /**
      * This method defines how pieces can move "normally", if potentially a move causes a
      * piece to kill can also be put here. This method is important because it defines the movement of the pieces!!
@@ -195,11 +194,19 @@ public class GameGUI extends Application {
     public void start(Stage primaryStage) {
 
         Scene scene = new Scene(createContent());
+
         primaryStage.setTitle("FSU Chess Client");
         primaryStage.setScene(scene);
+
         primaryStage.show();
 
     } // end start.
 
+    @Override
+    public void stop() {
+
+        ConnectionGUI.primaryStage.close();
+
+    } // end stop.
 
 } // end class Start.
