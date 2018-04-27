@@ -226,6 +226,11 @@ public class ConnectionGUI extends Application {
 
             Main.setRequestingUser(null);
 
+            playChessButton.setDisable(true);
+            wantToPlayChessLabel.setText("Joining chess game...");
+            userDecisionYesSubmitButton.setDisable(true);
+            userDecisionNoSubmitButton.setDisable(true);
+
         });
 
         userDecisionNoSubmitButton.setOnAction(event -> {
