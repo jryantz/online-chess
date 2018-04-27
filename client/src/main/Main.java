@@ -36,13 +36,13 @@ public class Main {
 
     } // end getNames.
 
-    public static void setUserWantsToPlay(String user) {
+    public static void setRequestingUser(String user) {
 
         userWantsToPlay = user;
 
     } // end setUserWantsToPlay.
 
-    public static String getUserWhoPlay() {
+    public static String getRequestingUser() {
 
         return userWantsToPlay;
 
