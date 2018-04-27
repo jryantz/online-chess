@@ -92,7 +92,7 @@ class Connection extends Thread {
                     System.out.println("Received: " + fromClient);
 
                     if (fromClient.startsWith("--")) {
-                        String[] command = fromClient.toLowerCase().substring(2).split(" ");
+                        String[] command = fromClient.substring(2).split(" ");
 
                         //System.out.println("Command");
                         //output.writeBytes("[Command] " + command[0] + "\n");

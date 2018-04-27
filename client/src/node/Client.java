@@ -150,7 +150,7 @@ class Connection extends Thread {
                 System.out.println(fromServer);
 
                 if (fromServer.startsWith("--")) {
-                    String[] command = fromServer.toLowerCase().substring(2).split(" ");
+                    String[] command = fromServer.substring(2).split(" ");
 
                     //System.out.println("Command");
 
