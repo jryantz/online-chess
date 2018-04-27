@@ -15,12 +15,7 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        //Application.launch(GameGUI.class);
-
         Application.launch(ConnectionGUI.class);
-
-
-        //Client c = new Client();
 
     } // end main.
 
