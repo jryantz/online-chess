@@ -121,9 +121,15 @@ class Connection extends Thread {
                             DataOutputStream requestPlay = new DataOutputStream(users.get(command[2]).getOutputStream());
                             requestPlay.writeBytes("--request " + command[1] + "\n");
                         } else if (command[0].equalsIgnoreCase("accept")) {
+                            System.out.println(command[1] + " accepted to play a game with " + command[2] + ".");
 
+                            DataOutputStream acceptPlay = new DataOutputStream(users.get(command[2]).getOutputStream());
+                            acceptPlay.writeBytes("--accept\n");
                         } else if (command[0].equalsIgnoreCase("reject")) {
+                            System.out.println(command[1] + " rejected the game with " + command[2] + ".");
 
+                            DataOutputStream acceptPlay = new DataOutputStream(users.get(command[2]).getOutputStream());
+                            acceptPlay.writeBytes("--reject\n");
                         } else if (command[0].equalsIgnoreCase("leave")) {
 
                         } else if (command[0].equalsIgnoreCase("move")) {
