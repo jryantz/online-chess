@@ -168,8 +168,7 @@ class Connection extends Thread {
                         System.out.println(command[1] + " would like to play chess with you.");
                         Main.setRequestingUser(command[1]);
 
-                        //addButtonsToAcceptOrRejectGameRequest(userDecisionOnGameRequest);
-                        updateUserWantsToPlayLabel(command[1]);
+                        updateUserWantsToPlayLabel();
                     }
                 }
 
@@ -185,12 +184,12 @@ class Connection extends Thread {
 
     } // end run.
 
-    public void updateUserWantsToPlayLabel(String user) {
+    public void updateUserWantsToPlayLabel() {
 
         Platform.runLater(() -> {
 
             ConnectionGUI.playChessButton.setDisable(true);
-            ConnectionGUI.wantToPlayChessLabel.setText(user + " wants to play chess with you!");
+            ConnectionGUI.wantToPlayChessLabel.setText(Main.getRequestingUser() + " wants to play chess with you!");
             ConnectionGUI.userDecisionYesSubmitButton.setDisable(false);
             ConnectionGUI.userDecisionNoSubmitButton.setDisable(false);
 
