@@ -32,8 +32,12 @@ public class ConnectionGUI extends Application {
     ObservableList<String> connectedUsers;
     ObservableList<String> chosenUser;
 
-    ObservableList<String> userDecisionOnGameList;
-    Boolean usersChoice = false;
+    public static Button playChessButton;
+    public static Label wantToPlayChessLabel;
+    public static Button userDecisionYesSubmitButton;
+    public static Button userDecisionNoSubmitButton;
+
+    //boolean userDecisionOnGameRequest = false;
 
     private Labeled notifyListChanges;
     private String newNames = "";
@@ -88,80 +92,85 @@ public class ConnectionGUI extends Application {
         GridPane root = new GridPane();
 
         root.setPadding(new Insets(30, 30, 30, 30));
+
+        // Set the title of the given scene.
         Text sceneTitle = new Text("Welcome to Chess! Please input your username.");
         sceneTitle.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
 
+        // Add the label for the first text field.
         Label usernameLabel = new Label("Username: ");
         root.add(usernameLabel, 4, 0);
 
+        // Add the username text field.
         TextField usernameTextField = new TextField();
         root.add(usernameTextField, 4, 2);
 
-        notifyListChanges = new Label();
-        notifyListChanges.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
-        root.add(notifyListChanges, 4, 9);
-
-        // GUI STUFF FOR 'PLAYING CHESS BUTTON' AND 'SELECTING OPPONENT'.
-        Label playWithUser = new Label("Chosen Chess Opponent: ");
-
-        chosenUser = FXCollections.observableArrayList(); // Will contain connected users.
-
-        ListView<String> playWithUserBox1 = new ListView<>(chosenUser);
-        playWithUserBox1.setPrefSize(25, 25);
-
-        VBox playwithUserBox = new VBox();
-        playwithUserBox.setAlignment(Pos.BOTTOM_CENTER);
-        root.add(playWithUser, 4, 8);
-
-        playwithUserBox.getChildren().add(playWithUserBox1);
-        root.add(playwithUserBox, 4, 10);
-
-        Button playChess = new Button();
-        playChess.setAlignment(Pos.BOTTOM_CENTER);
-        playChess.setText("Play Chess");
-        playChess.setDisable(true);
-        root.add(playChess, 4, 14);
-
-        // GUI STUFF FOR THE TABLE OF CONNECTED USERS, ONLINE USERS LABEL, USERNAME LABEL, AND CONNECT BUTTON.
-        Label justOnlineUsers = new Label("Online Users ");
-        root.add(justOnlineUsers, 4, 5);
-
-        // CREATES A BLANK LIST.
-        connectedUsers = FXCollections.observableArrayList(); // Will contain connected users.
-
-        VBox selectUsers = new VBox();
-
-        ListView<String> listOfOnlineUsers = new ListView(connectedUsers);
-        listOfOnlineUsers.setOrientation(Orientation.VERTICAL);
-        listOfOnlineUsers.setPrefSize(200, 200);
-
-        selectUsers.setAlignment(Pos.BOTTOM_CENTER);
-        selectUsers.getChildren().addAll(listOfOnlineUsers);
-        root.add(selectUsers, 4, 6);
-
+        // Add the username submit button.
         Button submitButton = new Button();
         submitButton.setText("Submit");
         root.add(submitButton, 4, 4);
 
-        Label wantToPlayChessLabel = new Label();
-        wantToPlayChessLabel.setText("Someone wants to play chess with you, want to play?");
+        // Add the label for the list of online users.
+        Label justOnlineUsers = new Label("Online Users: ");
+        root.add(justOnlineUsers, 4, 6);
 
-        // CHESS GAME REQUEST STUFF.
-        userDecisionOnGameList = FXCollections.observableArrayList(); // Will contain connected users.
-        VBox userDecisionOnGameBox = new VBox();
+        // Will contain connected users, currently empty.
+        connectedUsers = FXCollections.observableArrayList();
 
-        ListView<String> userDecisionOnGameListView = new ListView(userDecisionOnGameList);
-        userDecisionOnGameListView.setOrientation(Orientation.VERTICAL);
-        userDecisionOnGameListView.setPrefSize(20, 20);
+        // List of all of the online users.
+        ListView<String> listOfOnlineUsers = new ListView(connectedUsers);
+        listOfOnlineUsers.setOrientation(Orientation.VERTICAL);
+        listOfOnlineUsers.setPrefSize(200, 200);
 
-        userDecisionOnGameBox.setAlignment(Pos.BOTTOM_CENTER);
-        userDecisionOnGameBox.getChildren().addAll(userDecisionOnGameListView);
-        root.add(userDecisionOnGameBox, 4, 16);
+        VBox selectUsers = new VBox();
 
-        Button userDecisionOnGameSubmitButton = new Button(); // Button at bottom to send players response if they want to play game.
-        userDecisionOnGameSubmitButton.setText("~Response~");
-        root.add(userDecisionOnGameSubmitButton, 4, 20);
-        userDecisionOnGameSubmitButton.setDisable(true);
+        selectUsers.setAlignment(Pos.BOTTOM_CENTER);
+        selectUsers.getChildren().addAll(listOfOnlineUsers);
+        root.add(selectUsers, 4, 8);
+
+        // Add the label for the selected user.
+        Label playWithUser = new Label("Chosen Chess Opponent: ");
+        root.add(playWithUser, 4, 10);
+
+        VBox playWithUserBox = new VBox();
+        playWithUserBox.setAlignment(Pos.BOTTOM_CENTER);
+
+        // Observable list that will contain all connected users.
+        chosenUser = FXCollections.observableArrayList();
+
+        ListView<String> playWithUserList = new ListView<>(chosenUser);
+        playWithUserList.setPrefSize(27, 27);
+
+        notifyListChanges = new Label();
+        notifyListChanges.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
+        root.add(notifyListChanges, 4, 12);
+
+        playWithUserBox.getChildren().add(playWithUserList);
+        root.add(playWithUserBox, 4, 12);
+
+        // Add button to send a request to another user.
+        playChessButton = new Button();
+        playChessButton.setAlignment(Pos.BOTTOM_CENTER);
+        playChessButton.setText("Play Chess");
+        playChessButton.setDisable(true);
+        root.add(playChessButton, 4, 14);
+
+        // Add the label for showing a request to play a game.
+        wantToPlayChessLabel = new Label();
+        wantToPlayChessLabel.setText("Waiting for request from other client.");
+        root.add(wantToPlayChessLabel, 4, 16);
+
+        // Add the button to say yes to a request
+        userDecisionYesSubmitButton = new Button();
+        userDecisionYesSubmitButton.setText("Yes");
+        root.add(userDecisionYesSubmitButton, 4, 18);
+        userDecisionYesSubmitButton.setDisable(true);
+
+        // Add the button to say no to a request.
+        userDecisionNoSubmitButton = new Button();
+        userDecisionNoSubmitButton.setText("No");
+        root.add(userDecisionNoSubmitButton, 4, 20);
+        userDecisionNoSubmitButton.setDisable(true);
 
         root.setAlignment(Pos.TOP_CENTER);
 
@@ -174,7 +183,7 @@ public class ConnectionGUI extends Application {
 
                 setUsername(usernameTextField.getText());
 
-                c = new Client(inputtedUsername, connectedUsers, userDecisionOnGameList);
+                c = new Client(inputtedUsername, connectedUsers);
 
                 while (Main.getNames() == null) {
 
@@ -192,7 +201,7 @@ public class ConnectionGUI extends Application {
                     newNames = oldNames;
                     usernameLabel.setText("Welcome to Chess: " + inputtedUsername + "!"); // Sends greeting.
                     submitButton.setDisable(true); // Disables submit button.
-                    playChess.setDisable(false); // Enables the play chess button.
+                    playChessButton.setDisable(false); // Enables the play chess button.
                 }
 
                 listOfOnlineUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, incomingConnectedUsers) -> {
@@ -205,51 +214,30 @@ public class ConnectionGUI extends Application {
 
         });
 
-        playChess.setOnAction(event -> {
+        playChessButton.setOnAction(event -> {
 
             c.sendGameRequestToServer(chosenUser.get(0));
 
         });
 
-//        if (userDecisionOnGameListView != null) {
-//            userDecisionOnGameListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, choice) -> {
-//
-//                System.out.println("userDecisionOnGameList selection changed from oldValue = " + oldValue + " to newValue = " + choice);
-//
-//                if (choice == "Yes") {
-//                    userDecisionOnGameSubmitButton.setDisable(false);
-//                    playChess.setDisable(true);
-//                    usersChoice = true;
-//                } else {
-//                    userDecisionOnGameSubmitButton.setDisable(false);
-//                    usersChoice = false;
-//                }
-//
-//            });
-//        }
+        userDecisionYesSubmitButton.setOnAction(event -> {
 
-        userDecisionOnGameSubmitButton.setOnAction(event -> {
+            c.sendAcceptOrRejectToServer(true, Main.getRequestingUser());
 
-            if (userDecisionOnGameListView != null) {
-                userDecisionOnGameListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, choice) -> {
+            Main.setRequestingUser(null);
 
-                    System.out.println("userDecisionOnGameList selection changed from oldValue = " + oldValue + " to newValue = " + choice);
+        });
 
-                    if (choice == "Yes") {
-                        userDecisionOnGameSubmitButton.setDisable(false);
-                        playChess.setDisable(true);
-                        usersChoice = true;
-                    } else {
-                        userDecisionOnGameSubmitButton.setDisable(false);
-                        usersChoice = false;
-                    }
+        userDecisionNoSubmitButton.setOnAction(event -> {
 
-                });
-            }
+            c.sendAcceptOrRejectToServer(false, Main.getRequestingUser());
 
-            System.out.println(usersChoice + " to the player of " + Main.getUserWhoPlay());
-            c.sendAcceptOrRejectToServer(usersChoice, Main.getUserWhoPlay());
-            userDecisionOnGameSubmitButton.setDisable(true);
+            Main.setRequestingUser(null);
+
+            playChessButton.setDisable(false);
+            wantToPlayChessLabel.setText("Waiting for request from other client.");
+            userDecisionYesSubmitButton.setDisable(true);
+            userDecisionNoSubmitButton.setDisable(true);
 
         });
 
