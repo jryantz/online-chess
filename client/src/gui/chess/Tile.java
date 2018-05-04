@@ -31,9 +31,9 @@ public class Tile extends Rectangle {
      * @param y
      */
     public Tile(boolean light, int x, int y) {
-        setWidth(GameGUI.TILE_SIZE);
-        setHeight(GameGUI.TILE_SIZE);
-        relocate(x * GameGUI.TILE_SIZE, y * GameGUI.TILE_SIZE);
+        setWidth(100);
+        setHeight(100);
+        relocate(x * 100, y * 100);
 
         //sets board light color and dark color 5F5B5F 0F0D0D
         setFill(light ? Color.valueOf("666") : Color.valueOf("333"));

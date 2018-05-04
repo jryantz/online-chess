@@ -7,6 +7,7 @@ import gui.chess.UserColor;
 import gui.connect.ConnectionGUI;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import main.Main;
@@ -19,11 +20,11 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 
-import static gui.chess.GameGUI.TILE_SIZE;
-import static gui.chess.GameGUI.pieceGroup;
+import static gui.chess.GameGUI.holdPieces;
 
 public class Client {
 
+    private static Piece piece;
     DataOutputStream output;
     static DataOutputStream outputMove;
 
@@ -31,6 +32,8 @@ public class Client {
     static PieceTypes UserPiecetype;
      String oldMousePressX;
     String oldMousePressY;
+    static int numTurns;
+    static int storeTime;
 
 
     /**
@@ -107,6 +110,9 @@ public class Client {
     public void sendAcceptOrRejectToServer(boolean accept, String usernameOfRequestingPlayer) {
 
         UserColor.settingUserColor();
+        if(UserColor.getUserColor().equals("WHITE") && (numTurns==1)){
+            GameGUI.setTurn(true);
+        }
 
         if (accept) {
             try {
@@ -125,19 +131,19 @@ public class Client {
     } // end sendAcceptOrRejectToServer
 
 
-    public static void sendUserMoveToServer(Pane root, PieceTypes type, double oldMousePressX, double oldMousePressY){
+    public static void sendUserMoveToServer( PieceTypes type, double oldMousePressX, double oldMousePressY){
         System.out.println("SENDING MOVE TO SERVER THAT IS : " + type + " " + oldMousePressX + " " + oldMousePressY);
+        GameGUI.setTurn(false);
+        Main.pause();
+        holdPieces.setMouseTransparent(true);
         UserPiecetype=type;
+
         try {
             getMoveOutput().writeBytes("--move " + Main.getUserMakeAMove() + " " + type + " " + oldMousePressX + " " + oldMousePressY + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }//end sendUserMoveToServer
-
-
-
 
 } // end class Client.
 
@@ -220,7 +226,10 @@ class Connection extends Thread {
                         System.out.println("RECEIVED MOVE FROM SERVER " + thisUser);
                         System.out.println(command[1] + " " + command[2] + " " + command[3]);
                         Main.setMove(command[1], command[2] , command[3]);
-                          movePiecesInThisGUI();
+                        GameGUI.setTurn(true);
+                        Main.setTime(Main.getTimeAfterSendMove());
+                        Main.start();
+                        movePiecesInThisGUI();
                     }
                 }
             }
@@ -242,25 +251,34 @@ class Connection extends Thread {
      */
     private void movePiecesInThisGUI() {
         if (Main.getSentPieceType() != null) {
+
             Platform.runLater(() -> {
+
+                GameGUI.setTurnNum(GameGUI.getTurnNumber()+1);
                 if( Main.getSentPieceType() != null){
 
-                    for(int i=0; i<pieceGroup.getChildren().size(); i++){
-                        piece= (Piece) pieceGroup.getChildren().get(i);
+                    holdPieces.setMouseTransparent(false);
+                    for(int i=0; i<holdPieces.getChildren().size(); i++){
+                        piece= (Piece) holdPieces.getChildren().get(i);
+
                         PieceTypes type =piece.getType();
                         if(type.equals(Main.getSentPieceType())){
 
                             int xCoordinate = Main.getXCoordinate();
                             if(!(piece.getScene().getX() ==xCoordinate) && !(piece.getScene().getY() ==Main.getYCoordinate())) {
-                                piece.move(type, xCoordinate, Main.getYCoordinate());
+                                    piece.move(type, xCoordinate, Main.getYCoordinate());
+
                             }
+
                         }
                     }
                 }
 
             });
+
+
         }
-    }
+    }// end movePiecesInThisGUI
 
 
     private void launchChessGame(String otherUserColor) {
@@ -268,6 +286,13 @@ class Connection extends Thread {
         Platform.runLater(() -> {
 
             UserColor.setUserColor(otherUserColor);
+            if(UserColor.getUserColor().equals("WHITE")){
+                GameGUI.setTurn(true);
+                Main.setTime(0);
+            }else if(UserColor.getUserColor().equals("BLACK")){
+                GameGUI.setTurn(false);
+                Main.setLastTime(0);
+            }
 
             new GameGUI().start(new Stage());
             ConnectionGUI.primaryStage.hide();

@@ -5,6 +5,7 @@ import java.util.Random;
 public class UserColor {
 
     private static String userColor;
+    private static boolean turnFromThread;
 
     /**
      * For setting the color what chess pieces the USERS will be using in the GUI.
@@ -39,5 +40,7 @@ public class UserColor {
         return userColor;
 
     } // end getUserColor.
+
+
 
 } // end class UserColor.

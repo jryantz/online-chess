@@ -1,13 +1,11 @@
 package gui.chess;
 
-import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import main.Main;
 
-import static gui.chess.GameGUI.TILE_SIZE;
 
 /**
  * The piece class is super important for GameGUI and movement stuff. The Pieces in the piece class are defined based
@@ -16,28 +14,25 @@ import static gui.chess.GameGUI.TILE_SIZE;
  */
 public class Piece extends StackPane {
 
+    public static double MousepressY;
     private static String pieceTypeString;
     private static PieceTypes convertPiece;
     private static  int socketXCoordinate;
     private static int socketYCoordinate;
+    private static int turnTime;
+    public double MousepressX;
     private PieceTypes type;
-
-
     private static String colorforCheck;
-
-    private double MousepressX, MousepressY; // REMEMBER MOUSE CLICK COORDINATES.
-    private double OldMousePressX, OldMousePressY; // Old coordinates.
-
-    private double OriginalPlaceX, OriginalPlaceY;
+    private double convertX, convertY;
 
     public static void setPieceXCoordinate(int x) {
-        int convert= x/TILE_SIZE;
+        int convert= x/100;
         socketXCoordinate=convert;
 
     }
 
     public static void setPieceYCoordinate(int y) {
-        int convert= y/TILE_SIZE;
+        int convert= y/100;
         socketYCoordinate=convert;
     }
 
@@ -49,365 +44,15 @@ public class Piece extends StackPane {
 
     public double getOldMousePressX() {
 
-        return OldMousePressX;
+        return convertY;
 
     } // end getOldMousePressX.
 
     public double getOldMousePressY() {
 
-        return OldMousePressY;
+        return convertY;
 
     } // end getOldMousePressY.
-
-    /**
-     * Helps design certain pieces based on type. This also gets the movement.
-     *
-     * @param color
-     * @param type
-     * @param x
-     * @param y
-     */
-    public Piece(String color, PieceTypes type, int x, int y) {
-
-
-        this.type = type;
-
-        if (type == PieceTypes.BLACK_PAWN1) {
-            Image img = new Image("/images/tronpawn3.png");
-            move(PieceTypes.BLACK_PAWN1, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }if (type == PieceTypes.BLACK_PAWN2) {
-            Image img = new Image("/images/tronpawn3.png");
-            move(PieceTypes.BLACK_PAWN2, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }if (type == PieceTypes.BLACK_PAWN3) {
-            Image img = new Image("/images/tronpawn3.png");
-            move(PieceTypes.BLACK_PAWN3, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }if (type == PieceTypes.BLACK_PAWN4) {
-            Image img = new Image("/images/tronpawn3.png");
-            move(PieceTypes.BLACK_PAWN4, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }if (type == PieceTypes.BLACK_PAWN5) {
-            Image img = new Image("/images/tronpawn3.png");
-            move(PieceTypes.BLACK_PAWN5, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        } if (type == PieceTypes.BLACK_PAWN6) {
-            Image img = new Image("/images/tronpawn3.png");
-            move(PieceTypes.BLACK_PAWN6, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }if (type == PieceTypes.BLACK_PAWN7) {
-            Image img = new Image("/images/tronpawn3.png");
-            move(PieceTypes.BLACK_PAWN7, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }if (type == PieceTypes.BLACK_PAWN8) {
-            Image img = new Image("/images/tronpawn3.png");
-            move(PieceTypes.BLACK_PAWN8, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }
-
-        if (type == PieceTypes.BLACK_ROOK1) {
-            Image img = new Image("/images/tronrook2.png");
-            move(PieceTypes.BLACK_ROOK1, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        } if (type == PieceTypes.BLACK_ROOK2) {
-            Image img = new Image("/images/tronrook2.png");
-            move(PieceTypes.BLACK_ROOK2, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }
-
-        if (type == PieceTypes.BLACK_KNIGHT1) {
-            Image img = new Image("/images/tronknight2.png");
-            move(PieceTypes.BLACK_KNIGHT1, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        } if (type == PieceTypes.BLACK_KNIGHT2) {
-            Image img = new Image("/images/tronknight2.png");
-            move(PieceTypes.BLACK_KNIGHT2, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }
-
-        if (type == PieceTypes.BLACK_BISHOP1) {
-            Image img = new Image("/images/tronbishop2.png");
-            move(PieceTypes.BLACK_BISHOP1, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        } if (type == PieceTypes.BLACK_BISHOP2) {
-            Image img = new Image("/images/tronbishop2.png");
-            move(PieceTypes.BLACK_BISHOP2, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }
-
-        if (type == PieceTypes.BLACK_QUEEN) {
-            Image img = new Image("/images/tronqueen2.png");
-            move(PieceTypes.BLACK_QUEEN, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }
-
-        if (type == PieceTypes.BLACK_KING) {
-            Image img = new Image("/images/tronking2.png");
-            move(PieceTypes.BLACK_KING, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }
-
-        // WHITE PIECES CONFIGURED BELOW IN TERMS OF LOOKS.
-
-        if (type == PieceTypes.WHITE_PAWN1) {
-            Image img = new Image("/images/tronpawn2.png");
-            move(PieceTypes.WHITE_PAWN1, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }if (type == PieceTypes.WHITE_PAWN2) {
-            Image img = new Image("/images/tronpawn2.png");
-            move(PieceTypes.WHITE_PAWN2, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }if (type == PieceTypes.WHITE_PAWN3) {
-            Image img = new Image("/images/tronpawn2.png");
-            move(PieceTypes.WHITE_PAWN3, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }if (type == PieceTypes.WHITE_PAWN4) {
-            Image img = new Image("/images/tronpawn2.png");
-            move(PieceTypes.WHITE_PAWN4, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }if (type == PieceTypes.WHITE_PAWN5) {
-            Image img = new Image("/images/tronpawn2.png");
-            move(PieceTypes.WHITE_PAWN5, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }if (type == PieceTypes.WHITE_PAWN6) {
-            Image img = new Image("/images/tronpawn2.png");
-            move(PieceTypes.WHITE_PAWN6, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }if (type == PieceTypes.WHITE_PAWN7) {
-            Image img = new Image("/images/tronpawn2.png");
-            move(PieceTypes.WHITE_PAWN7, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }if (type == PieceTypes.WHITE_PAWN8) {
-            Image img = new Image("/images/tronpawn2.png");
-            move(PieceTypes.WHITE_PAWN8, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }
-
-        if (type == PieceTypes.WHITE_QUEEN) {
-            Image img = new Image("/images/tronqueen.png");
-            move(PieceTypes.WHITE_QUEEN, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }
-
-        if (type == PieceTypes.WHITE_KING) {
-            Image img = new Image("/images/tronking.png");
-            move(PieceTypes.WHITE_KING, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }
-
-        if (type == PieceTypes.WHITE_BISHOP1) {
-            Image img = new Image("/images/tronbishop.png");
-            move(PieceTypes.WHITE_BISHOP1, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }  if (type == PieceTypes.WHITE_BISHOP2) {
-            Image img = new Image("/images/tronbishop.png");
-            move(PieceTypes.WHITE_BISHOP2, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }
-
-        if (type == PieceTypes.WHITE_ROOK1) {
-            Image img = new Image("/images/tronrook.png");
-            move(PieceTypes.WHITE_ROOK1, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }  if (type == PieceTypes.WHITE_ROOK2) {
-            Image img = new Image("/images/tronrook.png");
-            move(PieceTypes.WHITE_ROOK2, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }
-
-        if (type == PieceTypes.WHITE_KNIGHT1) {
-            Image img = new Image("/images/tronknight.png");
-            move(PieceTypes.WHITE_KNIGHT1, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-
-        } if (type == PieceTypes.WHITE_KNIGHT2) {
-            Image img = new Image("/images/tronknight.png");
-            move(PieceTypes.WHITE_KNIGHT2, x, y);
-            Rectangle piece = new Rectangle(TILE_SIZE * 0.6325, TILE_SIZE * 0.80);
-            piece.setFill(new ImagePattern(img));
-            piece.setTranslateX((TILE_SIZE - TILE_SIZE * 0.3125 * 2) / 2);
-            piece.setTranslateY((TILE_SIZE - TILE_SIZE * 0.36 * 2) / 2);
-            getChildren().addAll(piece);
-        }
-
-        //SET PIECE TYPE COLOR
-        if(convertPiece == null && Main.getSentPieceType()==null) {
-            setPieceColorType(type);
-        }
-        setOnMousePressed(e -> {
-            MousepressX = e.getSceneX();
-            MousepressY = e.getSceneY();
-            System.out.println(type + " ORIGINAL MOUSE PRESS BEFORE MOVE X" + OldMousePressX + " ORIGINAL MOUSE PRESS BEFORE MOVE Y" + OldMousePressY);
-        });
-
-        //GET PIECE TYPE COLOR THAT THE USER CLICKS ON BEFORE DRAG AND SEE IF IT MATCHES USER COLOR
-        if(color.equals(getPieceColorType())) {
-            setOnMouseDragged(e -> {
-                relocate(e.getSceneX() - MousepressX + OldMousePressX, e.getSceneY() - MousepressY + OldMousePressY);
-            });
-
-        }
-    } // end Piece.
-
-    /**
-     * Method for moving pieces based on mouse clicks.
-     *
-     * @param x
-     * @param y
-     */
-    public void move(PieceTypes type, int x, int y) {
-
-        OldMousePressX = x * TILE_SIZE;
-        OldMousePressY = y * TILE_SIZE;
-        relocate(OldMousePressX, OldMousePressY);
-
-    } // end move.
-
-    /**
-     * This method sets color of pieces which the user wil be using.
-     * @param pieceType
-     */
-    public void setPieceColorType(PieceTypes pieceType) {
-
-        if (pieceType.equals(PieceTypes.BLACK_BISHOP1) ||pieceType.equals(PieceTypes.BLACK_BISHOP2) ||
-                pieceType.equals(PieceTypes.BLACK_KING) || pieceType.equals(PieceTypes.BLACK_KNIGHT1) ||
-                pieceType.equals(PieceTypes.BLACK_KNIGHT2) || pieceType.equals(PieceTypes.BLACK_ROOK1) ||
-                pieceType.equals(PieceTypes.BLACK_ROOK2) || pieceType.equals(PieceTypes.BLACK_QUEEN) ||
-                pieceType.equals(PieceTypes.BLACK_PAWN1) || pieceType.equals(PieceTypes.BLACK_PAWN2) ||
-                pieceType.equals(PieceTypes.BLACK_PAWN3) || pieceType.equals(PieceTypes.BLACK_PAWN4) ||
-                pieceType.equals(PieceTypes.BLACK_PAWN5) || pieceType.equals(PieceTypes.BLACK_PAWN6) ||
-                pieceType.equals(PieceTypes.BLACK_PAWN7) || pieceType.equals(PieceTypes.BLACK_PAWN8)) {
-            colorforCheck = "BLACK";
-        } else {
-            colorforCheck = "WHITE";
-        }
-
-    } // end setPieceColorType
 
     /**
      * This method transforms the specific piece the user just moved into a string. This will
@@ -430,7 +75,7 @@ public class Piece extends StackPane {
             setStringToPiece(PieceTypes.BLACK_KNIGHT2);
 
         }else if(userPiece.equals(PieceTypes.BLACK_ROOK1.toString())){
-             setStringToPiece(PieceTypes.BLACK_ROOK1);
+            setStringToPiece(PieceTypes.BLACK_ROOK1);
         }else if(userPiece.equals(PieceTypes.BLACK_ROOK2.toString())){
             setStringToPiece(PieceTypes.BLACK_ROOK2);
         }else if(userPiece.equals(PieceTypes.BLACK_QUEEN.toString())){
@@ -492,6 +137,355 @@ public class Piece extends StackPane {
         }
     }//end convertStringToPieceTypes
 
+
+    /**
+     * Helps design certain pieces based on type. This also gets the movement.
+     *
+     * @param turn
+     * @param color
+     * @param type
+     * @param x
+     * @param y
+     */
+    public Piece(boolean turn, String color, PieceTypes type, int x, int y) {
+
+        this.type = type;
+
+        if (type == PieceTypes.BLACK_PAWN1) {
+            Image img = new Image("/images/tronpawn3.png");
+            move(PieceTypes.BLACK_PAWN1, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }if (type == PieceTypes.BLACK_PAWN2) {
+            Image img = new Image("/images/tronpawn3.png");
+            move(PieceTypes.BLACK_PAWN2, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }if (type == PieceTypes.BLACK_PAWN3) {
+            Image img = new Image("/images/tronpawn3.png");
+            move(PieceTypes.BLACK_PAWN3, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }if (type == PieceTypes.BLACK_PAWN4) {
+            Image img = new Image("/images/tronpawn3.png");
+            move(PieceTypes.BLACK_PAWN4, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }if (type == PieceTypes.BLACK_PAWN5) {
+            Image img = new Image("/images/tronpawn3.png");
+            move(PieceTypes.BLACK_PAWN5, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        } if (type == PieceTypes.BLACK_PAWN6) {
+            Image img = new Image("/images/tronpawn3.png");
+            move(PieceTypes.BLACK_PAWN6, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }if (type == PieceTypes.BLACK_PAWN7) {
+            Image img = new Image("/images/tronpawn3.png");
+            move(PieceTypes.BLACK_PAWN7, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }if (type == PieceTypes.BLACK_PAWN8) {
+            Image img = new Image("/images/tronpawn3.png");
+            move(PieceTypes.BLACK_PAWN8, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }
+
+        if (type == PieceTypes.BLACK_ROOK1) {
+            Image img = new Image("/images/tronrook2.png");
+            move(PieceTypes.BLACK_ROOK1, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        } if (type == PieceTypes.BLACK_ROOK2) {
+            Image img = new Image("/images/tronrook2.png");
+            move(PieceTypes.BLACK_ROOK2, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }
+
+        if (type == PieceTypes.BLACK_KNIGHT1) {
+            Image img = new Image("/images/tronknight2.png");
+            move(PieceTypes.BLACK_KNIGHT1, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        } if (type == PieceTypes.BLACK_KNIGHT2) {
+            Image img = new Image("/images/tronknight2.png");
+            move(PieceTypes.BLACK_KNIGHT2, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }
+
+        if (type == PieceTypes.BLACK_BISHOP1) {
+            Image img = new Image("/images/tronbishop2.png");
+            move(PieceTypes.BLACK_BISHOP1, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        } if (type == PieceTypes.BLACK_BISHOP2) {
+            Image img = new Image("/images/tronbishop2.png");
+            move(PieceTypes.BLACK_BISHOP2, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }
+
+        if (type == PieceTypes.BLACK_QUEEN) {
+            Image img = new Image("/images/tronqueen2.png");
+            move(PieceTypes.BLACK_QUEEN, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }
+
+        if (type == PieceTypes.BLACK_KING) {
+            Image img = new Image("/images/tronking2.png");
+            move(PieceTypes.BLACK_KING, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }
+
+        // WHITE PIECES CONFIGURED BELOW IN TERMS OF LOOKS.
+
+        if (type == PieceTypes.WHITE_PAWN1) {
+            Image img = new Image("/images/tronpawn2.png");
+            move(PieceTypes.WHITE_PAWN1, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }if (type == PieceTypes.WHITE_PAWN2) {
+            Image img = new Image("/images/tronpawn2.png");
+            move(PieceTypes.WHITE_PAWN2, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }if (type == PieceTypes.WHITE_PAWN3) {
+            Image img = new Image("/images/tronpawn2.png");
+            move(PieceTypes.WHITE_PAWN3, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }if (type == PieceTypes.WHITE_PAWN4) {
+            Image img = new Image("/images/tronpawn2.png");
+            move(PieceTypes.WHITE_PAWN4, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }if (type == PieceTypes.WHITE_PAWN5) {
+            Image img = new Image("/images/tronpawn2.png");
+            move(PieceTypes.WHITE_PAWN5, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }if (type == PieceTypes.WHITE_PAWN6) {
+            Image img = new Image("/images/tronpawn2.png");
+            move(PieceTypes.WHITE_PAWN6, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }if (type == PieceTypes.WHITE_PAWN7) {
+            Image img = new Image("/images/tronpawn2.png");
+            move(PieceTypes.WHITE_PAWN7, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }if (type == PieceTypes.WHITE_PAWN8) {
+            Image img = new Image("/images/tronpawn2.png");
+            move(PieceTypes.WHITE_PAWN8, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }
+
+        if (type == PieceTypes.WHITE_QUEEN) {
+            Image img = new Image("/images/tronqueen.png");
+            move(PieceTypes.WHITE_QUEEN, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }
+
+        if (type == PieceTypes.WHITE_KING) {
+            Image img = new Image("/images/tronking.png");
+            move(PieceTypes.WHITE_KING, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }
+
+        if (type == PieceTypes.WHITE_BISHOP1) {
+            Image img = new Image("/images/tronbishop.png");
+            move(PieceTypes.WHITE_BISHOP1, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }  if (type == PieceTypes.WHITE_BISHOP2) {
+            Image img = new Image("/images/tronbishop.png");
+            move(PieceTypes.WHITE_BISHOP2, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }
+
+        if (type == PieceTypes.WHITE_ROOK1) {
+            Image img = new Image("/images/tronrook.png");
+            move(PieceTypes.WHITE_ROOK1, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }  if (type == PieceTypes.WHITE_ROOK2) {
+            Image img = new Image("/images/tronrook.png");
+            move(PieceTypes.WHITE_ROOK2, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }
+
+        if (type == PieceTypes.WHITE_KNIGHT1) {
+            Image img = new Image("/images/tronknight.png");
+            move(PieceTypes.WHITE_KNIGHT1, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+
+        } if (type == PieceTypes.WHITE_KNIGHT2) {
+            Image img = new Image("/images/tronknight.png");
+            move(PieceTypes.WHITE_KNIGHT2, x, y);
+            Rectangle piece = new Rectangle(100 * 0.6325, 100 * 0.80);
+            piece.setFill(new ImagePattern(img));
+            piece.setTranslateX((100 - 100 * 0.3125 * 2) / 2);
+            piece.setTranslateY((100 - 100 * 0.36 * 2) / 2);
+            getChildren().addAll(piece);
+        }
+        //SET PIECE TYPE COLOR
+        if(convertPiece == null && Main.getSentPieceType()==null) {
+            setPieceColorType(type);
+        }
+            setOnMousePressed(e -> {
+                    MousepressX = e.getSceneX();
+                    MousepressY = e.getSceneY();
+            });
+            //GET PIECE TYPE COLOR THAT THE USER CLICKS ON BEFORE DRAG AND SEE IF IT MATCHES USER COLOR
+            if (color.equals(getPieceColorType())) {
+                setOnMouseDragged(e -> {
+                    relocate(e.getSceneX() - MousepressX + convertX, e.getSceneY() - MousepressY + convertY);
+                });
+            }
+
+    } // end Piece.
+
+
+
+    /**
+     * Method for moving pieces based on mouse clicks.
+     *
+     * @param x
+     * @param y
+     */
+    public void move(PieceTypes type, int x, int y) {
+        convertX = x * 100;
+        convertY = y * 100;
+        relocate(convertX, convertY);
+    } // end move.
+
+    /**
+     * This method sets color of pieces which the user wil be using.
+     * @param pieceType
+     */
+    public void setPieceColorType(PieceTypes pieceType) {
+
+        if (pieceType.equals(PieceTypes.BLACK_BISHOP1) ||pieceType.equals(PieceTypes.BLACK_BISHOP2) ||
+                pieceType.equals(PieceTypes.BLACK_KING) || pieceType.equals(PieceTypes.BLACK_KNIGHT1) ||
+                pieceType.equals(PieceTypes.BLACK_KNIGHT2) || pieceType.equals(PieceTypes.BLACK_ROOK1) ||
+                pieceType.equals(PieceTypes.BLACK_ROOK2) || pieceType.equals(PieceTypes.BLACK_QUEEN) ||
+                pieceType.equals(PieceTypes.BLACK_PAWN1) || pieceType.equals(PieceTypes.BLACK_PAWN2) ||
+                pieceType.equals(PieceTypes.BLACK_PAWN3) || pieceType.equals(PieceTypes.BLACK_PAWN4) ||
+                pieceType.equals(PieceTypes.BLACK_PAWN5) || pieceType.equals(PieceTypes.BLACK_PAWN6) ||
+                pieceType.equals(PieceTypes.BLACK_PAWN7) || pieceType.equals(PieceTypes.BLACK_PAWN8)) {
+            colorforCheck = "BLACK";
+        } else {
+            colorforCheck = "WHITE";
+        }
+
+    } // end setPieceColorType
+
+
     /**
      * This method gets the piece color that the user will be controlling
      * @return
@@ -524,9 +518,11 @@ public class Piece extends StackPane {
      */
     public void cancelMove() {
 
-        relocate(OldMousePressX, OldMousePressY);
+        relocate(convertX, convertY);
 
     } // end cancelMove.
+
+
 
 
 } // end class Piece.

@@ -1,6 +1,7 @@
 package gui.connect;
 
 import gui.chess.GameGUI;
+import gui.chess.Piece;
 import gui.chess.UserColor;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -19,6 +20,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.Main;
 import node.Client;
+
+import static gui.chess.GameGUI.holdPieces;
+
 
 /**
  * This class is used to for the client to gui.connect to the server. The client class is also created in here.
@@ -42,6 +46,7 @@ public class ConnectionGUI extends Application {
     private Labeled notifyListChanges;
     private String newNames = "";
     private String oldNames = "";
+    private Piece piece;
 
     /**
      * Start method for GUI. The scene calls the method createContent, which sends the username of the
@@ -227,7 +232,18 @@ public class ConnectionGUI extends Application {
             userDecisionYesSubmitButton.setDisable(true);
             userDecisionNoSubmitButton.setDisable(true);
 
+            if(UserColor.getUserColor().equals("BLACK")){
+                holdPieces.setMouseTransparent(true);
+                GameGUI.setTurn(false);
+                Main.setLastTime(0);
+            }if(UserColor.getUserColor().equals("WHITE")){
+                GameGUI.setTurn(true);
+                Main.setTime(0);
+            }
+
             new GameGUI().start(new Stage());
+
+
             primaryStage.hide();
 
         });

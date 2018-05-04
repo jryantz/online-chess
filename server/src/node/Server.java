@@ -144,7 +144,6 @@ class Connection extends Thread {
                             }
 
                             putUserPairsIntoHash(usernames,sockets, command[1], command[2], clientSocket); //puts user pairs together
-
                             System.out.println(usersInGame);
                             acceptPlay.writeBytes("--accept " + userColor + "\n");
 
@@ -167,10 +166,10 @@ class Connection extends Thread {
                 } catch (IOException e) {
                 e.printStackTrace();
             }
-
            }
         System.exit(0);
         } // end run.
+
 
     /**
      * This method takes the username that just made the move and the HashMap that contains all the users
@@ -357,6 +356,8 @@ class Connection extends Thread {
         }
 
     } // end emitUserList.
+
+
 
 } // end class Connection.
 

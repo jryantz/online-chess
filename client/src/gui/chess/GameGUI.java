@@ -2,9 +2,12 @@ package gui.chess;
 
 import gui.connect.ConnectionGUI;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import main.Main;
@@ -13,19 +16,35 @@ import node.Client;
 
 public class GameGUI extends Application {
 
-    public static final int TILE_SIZE = 100; // GameGUI TILE.
-    public static final int WIDTH = 8; // FOR GameGUI. DEFINES WIDTH AND HEIGHT FOR TILE.
-    public static final int HEIGHT = 8; // GameGUI TILE.
 
-
-    private static double OldMousePressX;
-    private static double OldMousePressY;
-    private static PieceTypes UserPiecetype;
+    private static double beforeXConversion;
+    private static double beforeYConversion;
     private static Pane root;
+    private static boolean turnFromThread;
+    private static int turnNumberForUser=0;
+    public static Label timer2;
+    private static Tile[][] Chessboard = new Tile[8][8]; // TILE GameGUI.
+    private static Group boards = new Group(); // GameGUI TILE.
+    public static Group holdPieces = new Group(); // GameGUI PIECES SIT ON TOP OF TILE.
+    private static PieceTypes UserPiecetype;
+    /**
+     * This is a method for the GameGUI! Starts the stage!
+     *
+     * @param primaryStage
+     * @throws Exception
+     */
+    @Override
+    public void start(Stage primaryStage) {
 
-    private static Tile[][] board = new Tile[WIDTH][HEIGHT]; // TILE GameGUI.
-    private static Group tileGroup = new Group(); // GameGUI TILE.
-    public static Group pieceGroup = new Group(); // GameGUI PIECES SIT ON TOP OF TILE.
+        Scene scene = new Scene(createChessStuff());
+
+        primaryStage.setTitle("FSU Chess Client");
+        primaryStage.setScene(scene);
+        scene.getStylesheets().add(GameGUI.class.getResource("GameGUI.css").toExternalForm());
+
+        primaryStage.show();
+
+    } // end start.
 
     /**
      * This method helps create the board for the GameGUI. With this method, tile coordinates are also set,
@@ -35,106 +54,122 @@ public class GameGUI extends Application {
      *
      * @return
      */
-    public static Parent createContent() {
+    public static Parent createChessStuff() {
 
-            root = new Pane();
+        root = new Pane();
+        root.setPrefSize(8 * 100 + 30 , 8 * 100+60);
+        Label usernameLabel = new Label("User: " + Main.getUserMakeAMove());
+        Label userColor = new Label(UserColor.getUserColor());
+        usernameLabel.setTranslateY(830);
+        userColor.setTranslateY(830);
+        userColor.setTranslateX(300);
+        Label letters = new Label("A" + "                 " + "B" + "                  " + "C" + "                  " + "D" +
+                "                  " + "E" + "                 " + "F" + "                 " + "G" + "                 " + "H");
+        letters.setTranslateY(800);
+        letters.setTranslateX(50);
 
-            root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
-            root.getChildren().addAll(tileGroup, pieceGroup);
+        Label numbers = new Label("1" + "                 " + "2" + "                  " + "3" + "                  " + "4" +
+                "                  " + "5" + "                 " + "6" + "                 " + "7" + "                   " + "8");
+        numbers.setTranslateY(400);
+        numbers.setTranslateX(467);
+        numbers.setRotate(-90);
+
+        timer2 = new Label("Timer: " + 0);
+        timer2.setText(String.valueOf(Main.getCurrentTime()));
+        timer2.setTranslateY(830);
+        timer2.setTranslateX(600);
+        root.getChildren().addAll(boards, holdPieces,usernameLabel,timer2,userColor, letters, numbers );
+
         if (Main.getSentPieceType() == null) {
-            for (int y = 0; y < HEIGHT; y++) {
-                for (int x = 0; x < WIDTH; x++) {
-
+            for (int y = 0; y < 8; y++) {
+                for (int x = 0; x < 8; x++) {
                     Tile tile = new Tile((x + y) % 2 == 0, x, y);
-                    board[x][y] = tile;
-                  //  Main.setTileStuff(tile);
-                    tileGroup.getChildren().add(tile);
-
+                    Chessboard[x][y] = tile;
+                    boards.getChildren().add(tile);
                     Piece piece = null;
-
                     if (y == 1 && x==0) {
-                        piece = createPieces(PieceTypes.BLACK_PAWN1, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_PAWN1, x, y); //POPULATE TOP BOARD
                     } if (y == 1 && x==1) {
-                        piece = createPieces(PieceTypes.BLACK_PAWN2, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_PAWN2, x, y); //POPULATE TOP BOARD
                     } if (y == 1 && x==2) {
-                        piece = createPieces(PieceTypes.BLACK_PAWN3, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_PAWN3, x, y); //POPULATE TOP BOARD
                     } if (y == 1 && x==3) {
-                        piece = createPieces(PieceTypes.BLACK_PAWN4, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_PAWN4, x, y); //POPULATE TOP BOARD
                     } if (y == 1 && x==4) {
-                        piece = createPieces(PieceTypes.BLACK_PAWN5, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_PAWN5, x, y); //POPULATE TOP BOARD
                     } if (y == 1 && x==5) {
-                        piece = createPieces(PieceTypes.BLACK_PAWN6, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_PAWN6, x, y); //POPULATE TOP BOARD
                     } if (y == 1 && x==6) {
-                        piece = createPieces(PieceTypes.BLACK_PAWN7, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_PAWN7, x, y); //POPULATE TOP BOARD
                     } if (y == 1 && x==7) {
-                        piece = createPieces(PieceTypes.BLACK_PAWN8, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_PAWN8, x, y); //POPULATE TOP BOARD
 
                     } if ((y == 0 && x == 0)) {
-                        piece = createPieces(PieceTypes.BLACK_ROOK1, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_ROOK1, x, y); //POPULATE TOP BOARD
                     } if (y == 0 && x==7) {
-                        piece = createPieces(PieceTypes.BLACK_ROOK2, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_ROOK2, x, y); //POPULATE TOP BOARD
 
                     } if ((y == 0 && x == 1)) {
-                        piece = createPieces(PieceTypes.BLACK_KNIGHT1, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_KNIGHT1, x, y); //POPULATE TOP BOARD
                     } if (y == 0 && x==6) {
-                        piece = createPieces(PieceTypes.BLACK_KNIGHT2, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_KNIGHT2, x, y); //POPULATE TOP BOARD
 
                     } if ((y == 0 && x == 2)) {
-                        piece = createPieces(PieceTypes.BLACK_BISHOP1, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_BISHOP1, x, y); //POPULATE TOP BOARD
                     } if (y == 0 && x==5) {
-                        piece = createPieces(PieceTypes.BLACK_BISHOP2, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_BISHOP2, x, y); //POPULATE TOP BOARD
 
                     } if (y == 0 && x == 3) {
-                        piece = createPieces(PieceTypes.BLACK_QUEEN, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_QUEEN, x, y); //POPULATE TOP BOARD
 
                     } if (y == 0 && x == 4) {
-                        piece = createPieces(PieceTypes.BLACK_KING, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.BLACK_KING, x, y); //POPULATE TOP BOARD
                     }
 
                     // WHITE PIECES PUT ON BOARD IN THE FOLLOWING X,Y COORDINATES BELOW.
 
                       if (y == 6 && x==0) {
-                        piece = createPieces(PieceTypes.WHITE_PAWN1, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_PAWN1, x, y); //POPULATE TOP BOARD
                     } if (y == 6 && x==1) {
-                        piece = createPieces(PieceTypes.WHITE_PAWN2, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_PAWN2, x, y); //POPULATE TOP BOARD
                     } if (y == 6 && x==2) {
-                        piece = createPieces(PieceTypes.WHITE_PAWN3, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_PAWN3, x, y); //POPULATE TOP BOARD
                     } if (y == 6 && x==3) {
-                        piece = createPieces(PieceTypes.WHITE_PAWN4, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_PAWN4, x, y); //POPULATE TOP BOARD
                     } if (y == 6 && x==4) {
-                        piece = createPieces(PieceTypes.WHITE_PAWN5, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_PAWN5, x, y); //POPULATE TOP BOARD
                     } if (y == 6 && x==5) {
-                        piece = createPieces(PieceTypes.WHITE_PAWN6, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_PAWN6, x, y); //POPULATE TOP BOARD
                     } if (y == 6 && x==6) {
-                        piece = createPieces(PieceTypes.WHITE_PAWN7, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_PAWN7, x, y); //POPULATE TOP BOARD
                     } if (y == 6 && x==7) {
-                        piece = createPieces(PieceTypes.WHITE_PAWN8, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_PAWN8, x, y); //POPULATE TOP BOARD
                     }
                      if (y == 7 && x == 3) {
-                        piece = createPieces(PieceTypes.WHITE_QUEEN, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_QUEEN, x, y); //POPULATE TOP BOARD
                     }
                      if (y == 7 && x == 4) {
-                        piece = createPieces(PieceTypes.WHITE_KING, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_KING, x, y); //POPULATE TOP BOARD
                     }
                      if ((y == 7 && x == 2)) {
-                        piece = createPieces(PieceTypes.WHITE_BISHOP1, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_BISHOP1, x, y); //POPULATE TOP BOARD
                     }if (y == 7 && x==5) {
-                        piece = createPieces(PieceTypes.WHITE_BISHOP2, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_BISHOP2, x, y); //POPULATE TOP BOARD
                     }
                      if ((y == 7 && x == 0)) {
-                        piece = createPieces(PieceTypes.WHITE_ROOK1, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_ROOK1, x, y); //POPULATE TOP BOARD
                     }if (y == 7 && x==7) {
-                        piece = createPieces(PieceTypes.WHITE_ROOK2, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_ROOK2, x, y); //POPULATE TOP BOARD
                     }
                      if ((y == 7 && x == 1)) {
-                        piece = createPieces(PieceTypes.WHITE_KNIGHT1, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_KNIGHT1, x, y); //POPULATE TOP BOARD
                     }if (y == 7 && x==6) {
-                        piece = createPieces(PieceTypes.WHITE_KNIGHT2, x, y); //POPULATE TOP BOARD
+                        piece = makePieces(PieceTypes.WHITE_KNIGHT2, x, y); //POPULATE TOP BOARD
                     }
 
                     if (piece != null) {
                         //tile.setPiece(piece);
-                        pieceGroup.getChildren().add(piece);
+                        holdPieces.getChildren().add(piece);
                     }
                 }
             }
@@ -143,6 +178,32 @@ public class GameGUI extends Application {
 
     } // end Parent.
 
+    /**
+     * This method sets the turn from true (meaning the timer will tick)
+     * or false (timer wont tick)
+     * @param turn
+     */
+    public static void  setTurn(boolean turn){
+        turnFromThread=turn;
+    }
+
+    /**
+     * This method gets the turn that is set in the setTurn method above.
+     * If the method determines if the timer will stop or keep going if
+     * it is someones turn
+     * @return
+     */
+    public static boolean getTurn(){
+        return turnFromThread;
+    }//end getTurn
+
+    public static void  setTurnNum(int turnNumber){
+        turnNumberForUser=turnNumber;
+    }//end setTurnNum
+
+    public static int getTurnNumber(){
+        return turnNumberForUser;
+    }//end getTurnNumber
 
 
     /**
@@ -156,41 +217,31 @@ public class GameGUI extends Application {
      * @param y
      * @return
      */
-    public static Piece createPieces(PieceTypes type, int x, int y) {
-
+    public static Piece makePieces(PieceTypes type, int x, int y) {
 
         String color = UserColor.getUserColor();
-
-        Piece piece = new Piece(color,type, x, y);
-
-        piece.setOnMouseClicked(e -> {
-            int newCoordinateX = toBoard(piece.getLayoutX()); // When user moves piece, the layout of the board is changed.
-            int newCoordinateY = toBoard(piece.getLayoutY());
-
-            MoveResult result = tryMove(piece, newCoordinateX, newCoordinateY); //Check if the piece can move to the new
-            //coordinates
-
-           int OldCoordinateX = toBoard(piece.getOldMousePressX());
-           int OldCoordinateY = toBoard(piece.getOldMousePressY());
-
-            switch (result.getType()) {
-                case NONE:
+        Boolean turn=false;
+        turn=GameGUI.getTurn();
+        Piece piece = new Piece(turn,color,type, x, y);
+            GameGUI.setTurn(true);
+            piece.setOnMouseClicked(e -> {
+                int afterXConversion = convertToPixelsOnGameBoard(piece.getLayoutX()); // When user moves piece, the layout of the board is changed.
+                int afterYConversion = convertToPixelsOnGameBoard(piece.getLayoutY());
+                AfterMove typeOfMove = controlMovements(piece, afterXConversion, afterYConversion); //Check if the piece can move to the new
+                if (typeOfMove.getType().equals(TypeOfChessMove.CANCEL)) {
                     piece.cancelMove();
-                    break;
-                case NORMAL:
-                    OldMousePressX=newCoordinateX*TILE_SIZE;
-                    OldMousePressY=newCoordinateY*TILE_SIZE;
-
-                            piece.move(type, newCoordinateX, newCoordinateY); // Get new coords for moved piece.
-                            System.out.println(type + " AFTER PIECE HAS MOVED X: " + newCoordinateX + " AFTER PIECE HAS MOVED Y: " + newCoordinateY);
-                            setUserMove(type, newCoordinateX, newCoordinateY); //set user move to this piece type and coordinate
-                            //to send to server
-                            Client.sendUserMoveToServer(root, type, OldMousePressX, OldMousePressY);
-                            board[OldCoordinateX][OldCoordinateY].setPiece(null);
-                            board[newCoordinateX][newCoordinateY].setPiece(piece);
-                            break;
-            }
-        });
+                }else if(typeOfMove.getType().equals(TypeOfChessMove.MOVEPIECE)) {
+                    beforeXConversion = convertToPixelsOnGameBoard(piece.getLayoutX()) * 100;
+                    beforeYConversion = convertToPixelsOnGameBoard(piece.getLayoutY()) * 100;
+                    piece.move(type, afterXConversion, afterYConversion); // Get new coords for moved piece.
+                    setUserMove(type, afterXConversion, afterYConversion); //set user move to this piece type and coordinate
+                    //to send to server
+                    Client.sendUserMoveToServer(type, beforeXConversion, beforeYConversion);
+                    GameGUI.setTurn(false);
+                    Main.pause();
+                    holdPieces.setMouseTransparent(true);
+                }
+            });
 
         return piece;
 
@@ -205,82 +256,75 @@ public class GameGUI extends Application {
      * @param YMove
      */
     public static void setUserMove(PieceTypes type, double XMove, double YMove){
-       // pieceTypeString= Piece.converToPieceType(type);
         UserPiecetype=type;
-        OldMousePressX = XMove;
-        OldMousePressY=YMove;
-
+        beforeXConversion = XMove;
+        beforeYConversion=YMove;
     }
-
-
     /**
-     * This method defines how pieces can move "normally", if potentially a move causes a
-     * piece to kill can also be put here. This method is important because it defines the movement of the pieces!!
-     * Given X and Y direction, this method can also control the specified pieces if necessary. Instead of having a
-     * "NORMAL" move type in the MoveResult class, A "NORMAL PAWN" movement can be specified! Remember, it needs
-     * to be declared in the MoveType.java file and then can have its X and Y coordinates specified below!
-     * MoveDirection is specified in PieceTypes.java, where black and white pieces are given a -1 and 1 to allow them
-     * to move forward or downward only on the board (this movement is not enforced at this point).
-     *
-     * @param piece
-     * @param newX
-     * @param newY
-     * @return
-     */
-    private static MoveResult tryMove(Piece piece, int newX, int newY) {
-
-        // If there is a piece to move, move it.
-        if (board[newX][newY].hasPiece()) {
-            return new MoveResult(MoveType.NONE);
-        }
-        //int x0 = toBoard(piece.getOldMousePressX());  Not used yet! Can enforce X-axis movement.
-        int y0 = toBoard(piece.getOldMousePressY());
-        // This if statement allows the pieces to move 7 spaces per move (not specified for the rules yet).
-        if (newY - y0 == 0 || newY - y0 <= 7) { // Move Direction checks to see how the pieces are moving (down or up).
-            return new MoveResult(MoveType.NORMAL);
-        }
-        // If player has not done anything, do not move anything.
-        return new MoveResult(MoveType.NONE);
-
-    } // end tryMove.
-
-    /**
-     * Pixel to Board Coordinates. This is used in the MoveResult Method above and is for
+     * Pixel to Board Coordinates. This is used in the AfterMove Method above and is for
      * the placement (as in, when the player moves a piece) when the piece moves to its new position. This method
      * centers the piece when it's moved to a new position! That is it.
      *
      * @param pixel
      * @return
      */
-    private static int toBoard(double pixel) {
-
-        return (int) (pixel + TILE_SIZE / 2) / TILE_SIZE; // FOR WHEN PIECE MOVES, THE PIECE WILL BE RECENTERED.
-
+    private static int convertToPixelsOnGameBoard(double pixel) {
+        int convertToBoard= (int) ((pixel+100/2)/100);
+        return convertToBoard; // FOR WHEN PIECE MOVES, THE PIECE WILL BE RECENTERED.
     } // end toBoard.
 
-    /**
-     * This is a method for the GameGUI! Starts the stage!
-     *
-     * @param primaryStage
-     * @throws Exception
-     */
-    @Override
-    public void start(Stage primaryStage) {
 
-        Scene scene = new Scene(createContent());
-
-        primaryStage.setTitle("FSU Chess Client");
-        primaryStage.setScene(scene);
-
-        primaryStage.show();
-
-    } // end start.
 
     @Override
     public void stop() {
-
         ConnectionGUI.primaryStage.close();
 
     } // end stop.
+
+
+    /**
+     * This method defines how pieces can move "normally", if potentially a move causes a
+     * piece to destroy can also be put here. This method is important because it defines the movement of the pieces!!
+     * Given X and Y direction, this method can also control the specified pieces if necessary. Instead of having a
+     * "NORMAL" move type in the AfterMove class, A " PAWN" movement can be specified! Remember, it needs
+     * to be declared in the TypeOfChessMove.java file and then can have its X and Y coordinates specified below!
+     * MoveDirection is specified in PieceTypes.java, where black and white pieces are given a -1 and 1 to allow them
+     * to move forward or downward only on the board (this movement is not enforced at this point).
+     *
+     * @param piece
+     * @param X
+     * @param Y
+     * @return
+     */
+    private static AfterMove controlMovements(Piece piece, int X, int Y) {
+        // If there is a piece to move, move it.
+        if (Chessboard[X][Y].hasPiece()) {
+            return new AfterMove(TypeOfChessMove.CANCEL);
+        }
+        //int x0 = toBoard(piece.getOldMousePressX());  Not used yet! Can enforce X-axis movement.
+        int y1 = convertToPixelsOnGameBoard(piece.getOldMousePressY());
+        // This if statement allows the pieces to move 7 spaces per move (not specified for the rules yet).
+        if (X - y1 == 0 || Y - y1 <= 7) { // Move Direction checks to see how the pieces are moving (down or up).
+            return new AfterMove(TypeOfChessMove.MOVEPIECE);
+        }
+        // If player has not done anything, do not move anything.
+        return new AfterMove(TypeOfChessMove.CANCEL);
+
+    } // end tryMove.
+
+
+
+    /**
+     * This method updates the timer in the thread inside the Main method
+     * @param hourTime
+     * @param moveTime
+     * @param minuteTime
+     */
+    public static void updateTimer(int hourTime, int moveTime, float minuteTime){
+        Platform.runLater(() -> {
+            timer2.setText(String.valueOf(hourTime) + "  " + String.valueOf(minuteTime) + "   " + String.valueOf(moveTime));
+        });
+    }
+
 
 } // end class Start.
