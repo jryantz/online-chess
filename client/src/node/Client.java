@@ -290,6 +290,7 @@ class Connection extends Thread {
                 GameGUI.setTurn(true);
                 Main.setTime(0);
             }else if(UserColor.getUserColor().equals("BLACK")){
+                holdPieces.setMouseTransparent(true);
                 GameGUI.setTurn(false);
                 Main.setLastTime(0);
             }
